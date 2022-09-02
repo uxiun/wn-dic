@@ -1,7 +1,9 @@
+/* eslint-disable */
 import {useQuery} from "urql"
 import Wn from "./Wn"
+import { Filter } from "./SearchBox"
 // import {FixedSizeList} from "react-window"
-const List = ({filters}) => {
+const List = ({filters}: {filters: Filter}) => {
     const {lmsjp, spell, sep, glojp} = filters
     const query = `
     query Wns($where: wnWhere) {
@@ -27,6 +29,7 @@ const List = ({filters}) => {
     // if (lmsjp != "") {
     //     vars.where.
     // }
+    console.log("filter: ", filters)
     const [{data, fetching, error}, redoQuery] = useQuery({query: query, variables: vars})
     if (fetching) return <p>Loading...</p>;
     if (error) return <p>Oh no... {error.message}</p>;
@@ -39,7 +42,9 @@ const List = ({filters}) => {
     //     itemSize={100}
     //     direction="ltr"
     //     >
-    return(
+    console.log(data)
+    return(<>
+        spell: {spell}
         <ol>
             {data.wns.map(wn=>(
                 <li key={wn.spell} className="wn" style={{"margin-bottom": "1em"}}>
@@ -48,7 +53,7 @@ const List = ({filters}) => {
             ))}
         </ol>
 
-    )
+    </>)
 }
 export default List
 
