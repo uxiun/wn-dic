@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useQuery } from "urql"
-const Hyp = ({ of, isHypo }) => {
+const Hyp = ({ of, isHypo }: {of: any, isHypo: any}) => {
     const rel = isHypo ? "jwlj" : "jwlk"
     const query = `
         query Wns($where: wnWhere) {
@@ -28,7 +28,7 @@ const Hyp = ({ of, isHypo }) => {
     if (fetching) return <p>Loading...</p>;
     if (error) return <p>Oh no... {error.message}</p>;
     return (
-        <div className={rel}>
+        <div className=`rel ${rel}`>
             {data.wns.map(container => { return(<>{
                 container[rel].map(wn=> <Wn key={wn.spell} wn={wn} />)
             }</>)
@@ -36,7 +36,7 @@ const Hyp = ({ of, isHypo }) => {
         </div>
     )
 }
-const Wn = ({ wn }) => {
+const Wn = ({ wn }: {wn: any}) => {
     const [showRel, setShowRel] = useState({
         hyper: false,
         hypo: false
@@ -59,7 +59,7 @@ const Wn = ({ wn }) => {
                 <button onClick={toggleShowRel("hypo")}>{showRel.hypo ? "hide" : "show"} hyponyms</button>
                 <button onClick={toggleShowRel("hyper")}>{showRel.hyper ? "hide" : "show"} hypernym</button>
             </div>
-            <div className="more" style={{"margin-left": "1em"}}>
+            <div className="more" >
                 {showRel.hypo ? <Hyp of={wn} isHypo={true} /> : ""}
                 {showRel.hyper ? <Hyp of={wn} isHypo={false} /> : ""}
             </div>

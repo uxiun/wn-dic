@@ -47,7 +47,7 @@ const List = ({filters}: {filters: Filter}) => {
         spell: {spell}
         <ol>
             {data.wns.map((wn: any)=>(
-                <li key={wn.spell} className="wn" style={{"margin-bottom": "1em"}}>
+                <li key={wn.spell} className="wn">
                     <Wn wn={wn} />
                 </li>
             ))}

@@ -23,7 +23,7 @@ interface SubmitQuery {
     sep: string,
     glojp: string
 }
-const Contena = ({ fil }) => {
+const Contena = ({ fil }: {fil: any}) => {
     if (
         fil.lm == "" &&
         fil.spell == "" &&

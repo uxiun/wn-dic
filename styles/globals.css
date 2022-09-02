@@ -19,3 +19,8 @@ a {
     background: black;
   }
 } */
+
+li.wn, .more {
+    margin-left: 1em;
+}
+
