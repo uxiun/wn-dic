@@ -27,23 +27,29 @@ const Hyp = ({ of, isHypo }: {of: any, isHypo: any}) => {
     const [{ data, fetching, error }, redoQuery] = useQuery({ query: query, variables: vars })
     if (fetching) return <p>Loading...</p>;
     if (error) return <p>Oh no... {error.message}</p>;
+    const classname = `rel ${rel}`
     return (
-        <div className=`rel ${rel}`>
-            {data.wns.map(container => { return(<>{
-                container[rel].map(wn=> <Wn key={wn.spell} wn={wn} />)
+        <div className={classname}>
+            {data.wns.map((container: any) => { return(<>{
+                container[rel].map((wn: any)=> <Wn key={wn.spell} wn={wn} />)
             }</>)
             })}
         </div>
     )
 }
+type ShowRelType = {
+    hyper: boolean,
+    hypo: boolean
+}
 const Wn = ({ wn }: {wn: any}) => {
-    const [showRel, setShowRel] = useState({
+    const [showRel, setShowRel] = useState<ShowRelType>({
         hyper: false,
         hypo: false
     })
-    const toggleShowRel = d => e => {
-        const before = showRel[d]
-        setShowRel({ ...showRel, [d]: !before })
+    const toggleShowRel = (d: string) => (e: any) => {
+        const s = d as keyof ShowRelType
+        const before = showRel[s]
+        setShowRel({ ...showRel, [s]: !before })
     }
     return (
         <div key={wn.spell} className="wn">

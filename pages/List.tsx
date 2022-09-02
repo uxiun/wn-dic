@@ -1,9 +1,9 @@
 /* eslint-disable */
 import {useQuery} from "urql"
 import Wn from "./Wn"
-import { Filter } from "./SearchBox"
+import { SearchForm } from "./SearchBox"
 // import {FixedSizeList} from "react-window"
-const List = ({filters}: {filters: Filter}) => {
+const List = ({filters}: {filters: SearchForm}) => {
     const {lmsjp, spell, sep, glojp} = filters
     const query = `
     query Wns($where: wnWhere) {

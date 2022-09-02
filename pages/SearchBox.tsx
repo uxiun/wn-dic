@@ -1,17 +1,21 @@
-import { useState, VFC, React } from "react"
+import { useState, VFC} from "react"
 import { useRouter } from "next/router"
 import { useForm, SubmitHandler } from "react-hook-form"
 import List from "./List"
-type SearchForm = {
+export type SearchForm = {
     lmsjp: string,
     spell: string,
     sep: string,
     glojp: string
 }
+enum StrOrBool {
+    SubmitQuery,
+    Submit
+}
 export type Filter = {
-    duration: Number,
-    updatedAt: Date,
-    submit: Boolean,
+    duration: number,
+    updatedAt: number,
+    submit: boolean,
     lmsjp: string,
     spell: string,
     sep: string,
@@ -41,10 +45,17 @@ const SearchBox: VFC = () => {
         reset,
         formState: { errors, isSubmitting },
     } = useForm<SearchForm>()
-    const [filter, setFilter] = useState<Filter>({
-        duration: 0,
-        updatedAt: Date.now(),
-        submit: false,
+    const [isSubmit, setSubmit] = useState(false)
+    // const [filter, setFilter] = useState<Filter>({
+    //     duration: 0,
+    //     updatedAt: Date.now(),
+    //     submit: false,
+    //     lmsjp: "",
+    //     spell: "",
+    //     sep: "",
+    //     glojp: "",
+    // })
+    const [filter, setFilter] = useState<SearchForm>({
         lmsjp: "",
         spell: "",
         sep: "",
@@ -74,23 +85,42 @@ const SearchBox: VFC = () => {
     //     console.log("data: ", data)
     //     reset()
     // }
-    const toggleView: SubmitHandler<SearchForm> = (data) => {
-        let query: SubmitQuery = {
-            lmsjp: "",
-            spell: "",
-            sep: "",
-            glojp: ""
-        }
-        const keys = [
-            "lmsjp",
-            "spell",
-            "sep",
-            "glojp",
-        ]
-        for (const [key, value] of Object.entries(query)) {
-            if (data[key] && data[key] != ""){query[key] = data[key]}
-        }
-        setFilter({...query, submit: true})
+    const toggleView: SubmitHandler<SearchForm> = (data: SearchForm) => {
+        setFilter(data)
+        setSubmit(true)
+        // let query: Filter = {
+        //     duration: 0,
+        //     updatedAt: Date.now(),
+        //     submit: false,
+        //     lmsjp: "",
+        //     spell: "",
+        //     sep: "",
+        //     glojp: ""
+        // }
+        // const keys = [
+        //     "lmsjp",
+        //     "spell",
+        //     "sep",
+        //     "glojp",
+        // ]
+        // for (const [key, value] of Object.entries(query)) {
+        //     const key1 = key as keyof SearchForm
+
+        //     if (data[key1] && data[key1] != ""){
+        //         query[key as keyof Filter] = data[key1]
+        //         // if (
+        //         //     key === "lmsjp" ||
+        //         //     key === "glojp" ||
+        //         //     key === "sep" ||
+        //         //     key === "spell"
+        //         // ) {
+        //         //     query[key as keyof Filter] = data[key1]
+        //         // } else {
+        //         //     query[key as keyof Filter] = ""
+        //         // }
+        //     }
+        // }
+        // setFilter({...filter, submit: true})
     }
     return (
         <div>
@@ -98,7 +128,7 @@ const SearchBox: VFC = () => {
                 <input {...register("spell")} />
                 <button type="submit">検索</button>
             </form>
-            <Contena fil={filter} />
+            {isSubmit? <List filters={filter} />: ""}
         </div>
     )
     // return (
