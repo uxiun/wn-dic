@@ -1,6 +1,6 @@
 import {useQuery} from "urql"
 import Wn from "./Wn"
-import {FixedSizeList} from "react-window"
+// import {FixedSizeList} from "react-window"
 const List = ({filters}) => {
     const {lmsjp, spell, sep, glojp} = filters
     const query = `
