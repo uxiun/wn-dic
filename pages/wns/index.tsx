@@ -2,7 +2,6 @@ import type { NextPage, GetServerSideProps } from "next"
 import { useRouter } from "next/router"
 import { useQuery, Provider } from "urql"
 import urqlClient from "../api/graphql"
-import List from "../List"
 import Wn from "../Wn"
 
 
@@ -62,7 +61,7 @@ const WnIndex: NextPage = () => {
             </Link>
             <ol>
                 {data.wns.map(wn => (
-                    <li className="wn" style={{ "margin-bottom": "1em" }}>
+                    <li key={wn.spell} className="wn" style={{ "margin-bottom": "1em" }}>
                         <Wn wn={wn} />
                     </li>
                 ))}
