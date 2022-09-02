@@ -2,4 +2,5 @@
 import { createClient } from 'urql';
 
 const urqlClient = createClient({url: "http://localhost:4000/"})
+// const urqlClient = createClient({url: url_export})
 export default urqlClient
