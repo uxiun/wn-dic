@@ -46,7 +46,7 @@ const Wn = ({ wn }) => {
         setShowRel({ ...showRel, [d]: !before })
     }
     return (
-        <div className="wn">
+        <div key={wn.spell} className="wn">
             <div className="self">
                 <div>{wn.depth}.{wn.childSize}.{wn.sisonSize}</div>
                 <div>{wn.spell}</div>
