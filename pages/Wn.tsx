@@ -30,7 +30,7 @@ const Hyp = ({ of, isHypo }) => {
     return (
         <div className={rel}>
             {data.wns.map(container => { return(<>{
-                container[rel].map(wn=> <Wn wn={wn} />)
+                container[rel].map(wn=> <Wn key={wn.spell} wn={wn} />)
             }</>)
             })}
         </div>

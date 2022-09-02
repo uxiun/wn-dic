@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import { useQuery, Provider } from "urql"
 import urqlClient from "../api/graphql"
 import Wn from "../Wn"
+import Link from "next/link"
 
 
 const WnIndex: NextPage = () => {
