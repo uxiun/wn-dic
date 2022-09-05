@@ -1,35 +1,108 @@
 /* eslint-disable */
 import {useQuery} from "urql"
+import {useState} from "react"
 import Wn from "./Wn"
-import { SearchForm } from "./SearchBox"
+import { FilterOp, SearchForm } from "./SearchBox"
+import { SimpleViewOption, RootViewOption } from "./SearchBox"
 // import {FixedSizeList} from "react-window"
-const List = ({filters}: {filters: SearchForm}) => {
-    const {lmsjp, spell, sep, glojp} = filters
+import { PushedOr } from "./Wn"
+const Ko = ({show, setShow}) => {
+    const toggle = e => {
+        setShow(!show)
+    }
+    const state = () => {
+        return show
+    }
+    return(<>
+        <h1>{state()?"show!":"hide..."}</h1>
+        <button onClick={toggle}>button</button>
+    </>)
+}
+const Tameshi = () => {
+    const [show, setShow] = useState(false)
+    return(<>
+    <Ko setShow={setShow} show={show} />
+    </>)
+}
+const List = ({filters, view, setView, showPush, filterOp}: {filterOp: FilterOp, filters: SearchForm, view: RootViewOption, setView: any, showPush: PushedOr}) => {
+    const {lmsjp, spell, sep, glojp, exjp, lms, glo, ex} = filters
     const query = `
     query Wns($where: wnWhere) {
         wns(where: $where) {
           spell
           seps
           sep
+          glo
           glojp
           lmsjp
           lms
+          lmspush {
+            push
+            pusher {
+                name
+                id
+            }
+            lang
+            id
+          }
+          lmsjppush {
+            push
+            pusher {
+                name
+                id
+            }
+            lang
+            id
+          }
+          ex
+          exjp
           depth
           childSize
           sisonSize
         }
       }
     `
+
     let vars = { where: {
-        spell_STARTS_WITH: spell,
         sep_STARTS_WITH: sep,
         glojp_CONTAINS: glojp,
-        lmsjp_INCLUDES: lmsjp,
+        glo_CONTAINS: glo,
+        AND: [],
     }}
-    // if (lmsjp != "") {
-    //     vars.where.
-    // }
-    console.log("filter: ", filters)
+    if (filterOp.spell.compMatch) {
+        vars.where.spell = spell
+    } else {
+        vars.where.spell_STARTS_WITH = spell
+    }
+    if (lmsjp != "") {
+        vars.where.AND.push(
+            {
+                OR: [
+                    {
+                        lmsjp_INCLUDES: lmsjp
+                    },
+                    {
+                        lmsjppush_SOME: {
+                            push: lmsjp
+                        }
+                    }
+                ]
+            })
+    }
+    if (lms != "") {
+        vars.where.AND.push({
+            OR: [
+                {
+                    lms_INCLUDES: lms
+                },
+                {
+                    lmspush_SOME: {
+                        push: lms
+                    }
+                }
+            ]
+        })
+    }
     const [{data, fetching, error}, redoQuery] = useQuery({query: query, variables: vars})
     if (fetching) return <p>Loading...</p>;
     if (error) return <p>Oh no... {error.message}</p>;
@@ -42,18 +115,16 @@ const List = ({filters}: {filters: SearchForm}) => {
     //     itemSize={100}
     //     direction="ltr"
     //     >
-    console.log(data)
-    return(<>
-        spell: {spell}
+    return(<div className="list">
         <ol>
             {data.wns.map((wn: any)=>(
                 <li key={wn.spell} className="wn">
-                    <Wn wn={wn} />
+                    <Wn wn={wn} view={view} setView={setView} showHyper={false} showPush={showPush}/>
                 </li>
             ))}
         </ol>
 
-    </>)
+    </div>)
 }
 export default List
 

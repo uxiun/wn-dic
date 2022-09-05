@@ -20,7 +20,65 @@ a {
   }
 } */
 
-li.wn, .more {
+.list>.wn>.more {
     margin-left: 1em;
 }
+ol{
+    padding-inline-start: 15px;
+}
+.main {
+    padding-bottom: 400px;
+    inset-inline-start: 0 !important;
+}
+.more {
+    margin-left: 0px;
+}
+.forms {
+    text-align: right;
+}
+.pin {
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+.textsearch input {
+    width: 9.6rem;
+    font-size: 1rem;
+}
+.main> .list {
+    max-width: 75%
+}
+.wn .self span {
+    position: relative;
+    z-index: 1;
+}
+.wn {
+    margin-top: 1em;
+}
+button {
+    border: none;
+    margin-right: 5px
+}
+button.open {
+    background-color: rgb(255, 201, 216);
+    border: none;
+}
 
+/*wordlistを横並び*/
+.words {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.word {
+    /* padding-right: 5px; */
+}
+.word+.word:before {
+    content: ", "
+}
+.usu {
+    opacity: 0.5;
+}
+button.search {
+    font-size: 1.2rem
+}

@@ -1,7 +1,19 @@
+// import { NextApiRequest, NextApiResponse } from 'next';
 
-const { Neo4jGraphQL } = require("@neo4j/graphql");
-const { ApolloServer, gql } = require("apollo-server");
-const neo4j = require("neo4j-driver");
+// export default function handler(
+//   request: NextApiRequest,
+//   response: NextApiResponse,
+// ) {
+//   response.status(200).json({
+//     body: request.body,
+//     query: request.query,
+//     cookies: request.cookies,
+//   });
+// }
+import {ApolloServer} from "apollo-server-lambda"
+import neo4j from "neo4j-driver";
+import { Neo4jGraphQL } from "@neo4j/graphql";
+
 require("dotenv").config()
 // (You may need to replace your connection details, username and password)
 const AURA_ENDPOINT = process.env.AURA_ENDPOINT
@@ -17,20 +29,6 @@ type tameshi {
     lists: [String!]!
     from: [tameshi!]! @relationship(type: "tameshi", direction: IN)
 }
-type User {
-    name: String!
-    id: ID! @id
-    push: [Push!]! @relationship(type: "byuser", direction: OUT)
-}
-
-type Push {
-    pusher: User! @relationship(type: "byuser", direction: IN)
-    push: String!
-    lang: String!
-    id: ID! @id
-    lms: [wn!]! @relationship(type: "lms", direction: OUT)
-    lmsjp: [wn!]! @relationship(type: "lmsjp", direction: OUT)
-}
 type wn {
     id: String
     spell: String!
@@ -43,8 +41,6 @@ type wn {
     lmjp: String
     lms: [String]
     lmsjp: [String]
-    lmspush: [Push!]! @relationship(type: "lms", direction: IN)
-    lmsjppush: [Push!]! @relationship(type: "lmsjp", direction: IN)
     keifu: [wn!]!
     ex: String
     exjp: String
@@ -68,8 +64,8 @@ interface Rel @relationshipProperties {
     k: [String!]
 }
 `
-const updCallback = async(root) =>{
-    return root.updateCount+1
+const updCallback = async (root) => {
+    return root.updateCount + 1
 }
 
 // Create instance that contains executable GraphQL schema from GraphQL type definitions
@@ -83,16 +79,13 @@ const neoSchema = new Neo4jGraphQL({
     }
 });
 
-// Generate schema
-neoSchema.getSchema().then((schema) => {
+
+const server = neoSchema.getSchema().then((schema) => {
     // Create ApolloServer instance to serve GraphQL schema
-    const server = new ApolloServer({
+    return new ApolloServer({
         schema,
         context: { driverConfig: { database: 'neo4j' } }
     });
-
-    // Start ApolloServer
-    server.listen().then(({ url }) => {
-        console.log(`GraphQL server ready at ${url}`);
-    });
 });
+
+exports.handler = server.createHandler()
