@@ -77,7 +77,7 @@ export type RootViewOption = {
     ex: boolean
     exjp: boolean
 }
-const defView: RootViewOption = {
+export const defView: RootViewOption = {
     spell: false,
     sep: true,
     glo: false,
@@ -162,9 +162,49 @@ export type FilterOp = {
         compMatch: boolean
     }
 }
+export const defShowPush = {
+    lms: false,
+    lmsjp: false,
+}
+export const defForm: ShowForm = {
+    spell: false,
+    sep: false,
+    glo: false,
+    glojp: false,
+    lms: false,
+    lmsjp: false,
+    ex: false,
+    exjp: false,
+    spelleach: {},
+    sepeach: {},
+    gloeach: {},
+    glojpeach: {},
+    lmseach: {},
+    lmsjpeach: {},
+    exeach: {},
+    exjpeach: {},
+}
+export type ShowForm = {
+    spell: boolean,
+    sep: boolean,
+    glo: boolean,
+    glojp: boolean,
+    lms: boolean,
+    lmsjp: boolean,
+    ex: boolean,
+    exjp: boolean,
+    spelleach: EachShowOp,
+    sepeach: EachShowOp,
+    gloeach: EachShowOp,
+    glojpeach: EachShowOp,
+    lmseach: EachShowOp,
+    lmsjpeach: EachShowOp,
+    exeach: EachShowOp,
+    exjpeach: EachShowOp,
+}
 
-
-const SearchBox: VFC = () => {
+const SearchBox: VFC = ({setView, view, form, setForm, showPush, setShowPush}:{setView:any, view:RootViewOption, form:ShowForm, setForm:any, showPush: PushedOr, setShowPush:any}) => {
+    console.log("view", view)
     const {
         register,
         handleSubmit,
@@ -182,12 +222,10 @@ const SearchBox: VFC = () => {
         glo: "",
         ex: ""
     })
-    const [viewOp, setViewOp] = useState<RootViewOption>(defView)
+    const [viewOp, setViewOp] = useState<RootViewOption>(view? view: defView)
+    const [showForm, setShowForm] = useState<ShowForm>(form? form: defForm)
     const [showMeta, setShowMeta] = useState<MetaToggle>({viewOp: true})
-    const [showPush, setShowPush] = useState<PushedOr>({
-        "lms": false,
-        "lmsjp": false,
-    })
+    let [showPush1, setShowPush1] = useState<PushedOr>(showPush? showPush: defShowPush)
     // const change = (k: string) => (e: React.FormEvent<HTMLInputElement>) => {
     //     const duration = Date.now() - filter.updatedAt
     //     setFilter({ ...filter, [k]: e.target.value, updatedAt: Date.now(), duration })
@@ -254,22 +292,45 @@ const SearchBox: VFC = () => {
         setShowMeta({...showMeta, [input]: !before})
     }
     const pushOpOut = (key: string) => (e:any) => {
-        const current = showPush[key]//ここをe.target.checkedにすると、作動順を考えれば当たり前だが、表示と状態があべこべになる
-        setShowPush({...showPush, [key]: !current})
+        if (showPush===undefined) {
+            console.log("showPush undefined")
+            const current = showPush1[key]//ここをe.target.checkedにすると、作動順を考えれば当たり前だが、表示と状態があべこべになる
+            setShowPush1({...showPush1, [key]: !current})
+        } else {
+            const current = showPush[key]//ここをe.target.checkedにすると、作動順を考えれば当たり前だが、表示と状態があべこべになる
+            setShowPush({...showPush, [key]: !current})
+        }
     }
     const toggleViewSimple = (key: string) => (e:any) => {
-        const now = viewOp[key]
-        if (key === "lms"|| key==="lmsjp") {
-            const setAll = (bool:boolean, o:EachShowOp) => {
-                for (const [key, value] of Object.entries(o)) {
-                    o[key] = bool
-                }
-                return o;
-            }//setAll(!now, viewOp[key+"each"])
-            setViewOp({...viewOp, [key]: !now, [key+"each"]: {}})
+        if (view===undefined){
+            console.log("view undefined")
+            const now = viewOp[key]
+            if (key === "lms"|| key==="lmsjp") {
+                const setAll = (bool:boolean, o:EachShowOp) => {
+                    for (const [key, value] of Object.entries(o)) {
+                        o[key] = bool
+                    }
+                    return o;
+                }//setAll(!now, viewOp[key+"each"])
+                setViewOp({...viewOp, [key]: !now, [key+"each"]: {}})
+            } else {
+                setViewOp({...viewOp, [key]: !now})
+            }
         } else {
-            setViewOp({...viewOp, [key]: !now})
+            const now = view[key]
+            if (key === "lms"|| key==="lmsjp") {
+                const setAll = (bool:boolean, o:EachShowOp) => {
+                    for (const [key, value] of Object.entries(o)) {
+                        o[key] = bool
+                    }
+                    return o;
+                }//setAll(!now, viewOp[key+"each"])
+                setView({...view, [key]: !now, [key+"each"]: {}})
+            } else {
+                setView({...view, [key]: !now})
+            }
         }
+        console.log("view", view)
         console.log("viewOp",viewOp)
     }
 
@@ -319,68 +380,86 @@ const SearchBox: VFC = () => {
         "ex": "x",
         "exjp": "c",
     }
+    const showPushBool = (key) => {
+        if (showPush){
+            return showPush[key]
+        } else {
+            return showPush1[key]
+        }
+    }
+    const viewBool = (key) => {
+        if (view) {
+            return view[key]
+        } else {
+            return viewOp[key]
+        }
+    }
     return (
         <div className="main">
-            <div className="forms pin">
+            <div className="pin">
+                <div className="forms">
 
-                    <form onSubmit={handleSubmit(toggleView)} >
-                        {wnzokusei.map(k =>
-                            <div className="textsearch">{k} <input {...register(k)} onKeyDown={keydown(
-                                [
-                                    {
-                                        keyStroke: ["Alt","s"],
-                                        f: ()=>tglFilterOp("spell")("compMatch")(),
-                                    },{
-                                        keyStroke: ["Alt", "k"],
-                                        f: ()=>toggleViewSimple(k)(),
-                                    },
-                                ]
-                                )} onKeyUp={keyup} /></div>
-                        )}
-                            <button type="submit" class="search">検索</button>
-                    </form>
+                        <form onSubmit={handleSubmit(toggleView)} >
+                            {wnzokusei.map(k =>
+                                <div className="textsearch">{k} <input {...register(k)} onKeyDown={keydown(
+                                    [
+                                        {
+                                            keyStroke: ["Alt","s"],
+                                            f: ()=>tglFilterOp("spell")("compMatch")(),
+                                        },{
+                                            keyStroke: ["Alt", "k"],
+                                            f: ()=>toggleViewSimple(k)(),
+                                        },
+                                    ]
+                                    )} onKeyUp={keyup} /></div>
+                            )}
+                                <button type="submit" class="search">検索</button>
+                        </form>
 
-                {/* <ViewOption setState={setViewOp} view={viewOp} /> */}
-                <form>
-                    <div>
-                        <label>
-                            <input type="checkbox" onChange={tglFilterOp("spell")("compMatch")} checked={filterOp.spell.compMatch} />
-                            spellの完全一致
-                        </label>
-                    </div>
-                </form>
-                <form>
-                    {wnzokusei.map(zokusei=>
+                    {/* <ViewOption setState={setViewOp} view={viewOp} /> */}
+                    <form>
                         <div>
                             <label>
-                                <input type="checkbox" onChange={toggleViewSimple(zokusei)} checked={viewOp[zokusei]}
-
-                                />
-                                {zokusei}
+                                <input type="checkbox" onChange={tglFilterOp("spell")("compMatch")} checked={filterOp.spell.compMatch} />
+                                spellの完全一致
                             </label>
                         </div>
-                    )}
-                </form>
-                <form>
-                    {["lms", "lmsjp"].map(key=> <>
-                            <input type="checkbox" id={`${key}push-option`} onChange={pushOpOut(key)} checked={showPush[key]} />
-                            <label for={`${key}push-option`}>{key}push</label>
-                        </>
-                    )}
-                </form>
-            </div>
-            <button onClick={toggleViewOption("viewOp")}>表示設定の表示切替</button>
-            {showMeta.viewOp?
-                <div>
-                    <div>
-                        {Object.entries(viewOp).map(kv=><div key={kv[0]}>{kv[0]}: {kv[1]? "true": "false"}</div> )}
-                    </div>
-                    <div>
-                        {Object.entries(showPush).map(kv=><div key={kv[0]}>{`${kv[0]}push`}: {kv[1]? "true": "false"}</div> )}
-                    </div>
+                    </form>
+                    <form>
+                        {wnzokusei.map(zokusei=>
+                            <div>
+                                <label>
+                                    <input type="checkbox" onChange={toggleViewSimple(zokusei)} checked={viewBool(zokusei)}
+
+                                    />
+                                    {zokusei}
+                                </label>
+                            </div>
+                        )}
+                    </form>
+                    <form>
+                        {["lms", "lmsjp"].map(key=> <div>
+                                <input type="checkbox" id={`${key}push-option`} onChange={pushOpOut(key)} checked={showPushBool(key)} />
+                                <label for={`${key}push-option`}>{key}push</label>
+                            </div>
+                        )}
+                    </form>
                 </div>
-            : ""}
-            {isSubmit? <List filters={filter} view={viewOp} showPush={showPush} setView={setViewOp} filterOp={filterOp} />: ""}
+                <div className="info">
+                    <button onClick={toggleViewOption("viewOp")}>表示設定の表示切替</button>
+                    {showMeta.viewOp?
+                        <>
+                            <div>
+                                {Object.entries(viewOp).map(kv=><div key={kv[0]}>{kv[0]}: {kv[1]? "true": "false"}</div> )}
+                            </div>
+                            <div>
+                                {Object.entries(showPush? showPush: showPush1).map(kv=><div key={kv[0]}>{`${kv[0]}push`}: {kv[1]? "true": "false"}</div> )}
+                            </div>
+                        </>
+                    : ""}
+                </div>
+            </div>
+            {isSubmit? <List filters={filter} view={view? view: viewOp} showPush={showPush? showPush: showPush1} setShowPush={setShowPush? setShowPush: setShowPush1} setView={setView? setView: setViewOp} filterOp={filterOp} form={form? form: showForm} setForm={setForm? setForm: setShowForm} />: ""}
         </div>
     )
     // return (

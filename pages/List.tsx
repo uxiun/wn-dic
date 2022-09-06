@@ -3,7 +3,7 @@ import {useQuery} from "urql"
 import {useState} from "react"
 import Wn from "./Wn"
 import { FilterOp, SearchForm } from "./SearchBox"
-import { SimpleViewOption, RootViewOption } from "./SearchBox"
+import { SimpleViewOption, RootViewOption, ShowForm, } from "./SearchBox"
 // import {FixedSizeList} from "react-window"
 import { PushedOr } from "./Wn"
 const Ko = ({show, setShow}) => {
@@ -24,7 +24,7 @@ const Tameshi = () => {
     <Ko setShow={setShow} show={show} />
     </>)
 }
-const List = ({filters, view, setView, showPush, filterOp}: {filterOp: FilterOp, filters: SearchForm, view: RootViewOption, setView: any, showPush: PushedOr}) => {
+const List = ({filters, view, setView, showPush, setShowPush, filterOp, form, setForm}: {filterOp: FilterOp, filters: SearchForm, view: RootViewOption, setView: any, showPush: PushedOr, setShowPush:any, form: ShowForm, setForm: any, }) => {
     const {lmsjp, spell, sep, glojp, exjp, lms, glo, ex} = filters
     const query = `
     query Wns($where: wnWhere) {
@@ -116,12 +116,15 @@ const List = ({filters, view, setView, showPush, filterOp}: {filterOp: FilterOp,
     //     direction="ltr"
     //     >
     return(<div className="list">
+        <h2>検索結果({data.wns.length})</h2>
         <ol>
-            {data.wns.map((wn: any)=>(
-                <li key={wn.spell} className="wn">
-                    <Wn wn={wn} view={view} setView={setView} showHyper={false} showPush={showPush}/>
-                </li>
-            ))}
+            {data.wns.length===0 ? "見つかりませんでした" :
+                <>{data.wns.map((wn: any)=>(
+                    <li key={wn.spell} className="wn">
+                        <Wn wn={wn} view={view} setView={setView} showHyper={false} showPush={showPush} setShowPush={setShowPush} form={form} setForm={setForm} />
+                    </li>
+                ))}</>
+            }
         </ol>
 
     </div>)

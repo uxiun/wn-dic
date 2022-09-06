@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { useQuery, useMutation } from "urql"
-import { SimpleViewOption, RootViewOption } from "./SearchBox"
-const Hyp = ({ of, isHypo, view, setView, showPush, showHyper }: { of: any, isHypo: boolean, showHyper: boolean, view: RootViewOption, setView: any, showPush: PushedOr }) => {
+import { SimpleViewOption, RootViewOption, ShowForm } from "./SearchBox"
+import Link from "next/link"
+const Hyp = ({ of, isHypo, view, setView, showPush, setShowPush, showHyper, form, setForm }: { of: any, isHypo: boolean, showHyper: boolean, view: RootViewOption, setView: any, showPush: PushedOr, setShowPush:any, form: ShowForm, setForm: any }) => {
     const rel = isHypo ? "jwlj" : "jwlk"
     const query = `
         query Wns($where: wnWhere) {
@@ -55,7 +56,7 @@ const Hyp = ({ of, isHypo, view, setView, showPush, showHyper }: { of: any, isHy
         <div className={classname}>
             {data.wns.map((container: any) => {
                 return (<>{
-                    container[rel].map((wn: any) => <Wn key={wn.spell} wn={wn} view={view} setView={setView} showPush={showPush} showHyper={showHyper} />)
+                    container[rel].map((wn: any) => <Wn key={wn.spell} wn={wn} view={view} setView={setView} showPush={showPush} showHyper={showHyper} form={form} setForm={setForm} setShowPush={setShowPush} />)
                 }</>)
             })}
         </div>
@@ -112,7 +113,7 @@ const LmsList = ({view, wn, key, setView}:{view:RootViewOption, wn:any, key:stri
 }
 
 
-const Wn = ({ wn, view, setView, showPush, showHyper }: { wn: any, view: RootViewOption, setView:any, showPush: PushedOr, showHyper: boolean }) => {
+const Wn = ({ wn, view, setView, form, setForm, showPush, showHyper, setShowPush }: { wn: any, view: RootViewOption, setView:any, showPush: PushedOr, showHyper: boolean, form:ShowForm, setForm:any, setShowPush:any }) => {
 
     const listtypes = ["lms", "lmsjp"]
     const pushes = ["lmspush", "lmsjppush"]
@@ -144,16 +145,6 @@ const Wn = ({ wn, view, setView, showPush, showHyper }: { wn: any, view: RootVie
       }
     `
     const [{ data, fetching, error }, updWns] = useMutation(push_query)
-    const [kokonoViewOp, setKokonoViewOp] = useState<SimpleViewOption>({
-        spell: view.spell,
-        sep: view.sep,
-        glo: view.glo,
-        glojp: view.glojp,
-        lms: view.lms,
-        lmsjp: view.lmsjp,
-        ex: view.ex,
-        exjp: view.exjp,
-    })
     const [showForm, setShowForm] = useState<SimpleViewOption>({
         spell: false,
         sep: false,
@@ -169,9 +160,15 @@ const Wn = ({ wn, view, setView, showPush, showHyper }: { wn: any, view: RootVie
         lmsjp: string
     }
 
-    const showAddForm = (key: string) => (e: any) => {
+    const showAddForm = (key: string, spell: string) => (e: any) => {
         const c = showForm[key as keyof SimpleViewOption]
         setShowForm({ ...showForm, [key]: !c })
+        const k = form[key+"each" as keyof ShowForm][spell]
+        if (k===undefined) {
+            setForm({...form, [key+"each"]: {...form[key+"each"], [spell]: form[key]} })
+        } else {
+            setForm({...form, [key+"each"]: {...form[key+"each"], [spell]: !k }})
+        }
     }
     const pushFormOnChange = (key: string) => (e: any) => {
         setFormText({ ...formText, [key]: e.target.value })
@@ -383,10 +380,25 @@ const Wn = ({ wn, view, setView, showPush, showHyper }: { wn: any, view: RootVie
             case "lms": return "lmseach"
         }
     }
+    const kokoquery = {
+        view: view,
+        wn: wn,
+        showPush: showPush,
+        showMore: showMore,
+        showHyper: showHyper,
+        form: form,
+    }
+    for (const [key, value] of Object.entries(kokoquery)) {
+        kokoquery[key] = JSON.stringify(value)
+    }
     return (
         <div key={wn.spell} className="wn">
             <div className="self">
-                <div>{wn.depth}.{wn.childSize}.{wn.sisonSize}</div>
+                <div>
+                    <Link as={`/wn/${wn.spell}`} href={{pathname: `/wn/[spell]`, query: kokoquery}}>
+                        <a>{wn.depth}.{wn.childSize}.{wn.sisonSize}</a>
+                    </Link>
+                </div>
                 {Object.entries(view).map(kv => {
                     const [key, showOr] = kv;
                     if (key === "lmseach" || key==="lmsjpeach") return ""
@@ -402,12 +414,31 @@ const Wn = ({ wn, view, setView, showPush, showHyper }: { wn: any, view: RootVie
                                 }
                             }
                         }
+                        const formRealState = () => {
+                            if (form[key+"each"] === undefined) {
+                                return form[key]
+                            } else {
+                                if (form[key+"each"][wn.spell] === undefined) {
+                                    return form[key]
+                                } else {
+                                    return form[key+"each"][wn.spell]
+                                }
+                            }
+                        }
                         return (
                             <div className={key}>
                                 <button onClick={tglKokono(key)} className={realState()?"open":"close"}>{toggleWord(realState())}</button>
                                 <button onClick={showAddForm(key)} className={showForm[key]?"open":"close"}>{toggleWord(showForm[key])}追加欄</button>
+                                <button onClick={showAddForm(key)} className={formRealState()?"open":"close"}>{toggleWord(formRealState())}追加欄</button>
                                 {wn[key] ? wn[key].length : "0"}<span className="usu"> {key}</span>
                                 {showForm[key] ?
+                                    <form onSubmit={pushSubmit(key)}>
+                                        <input type="text" value={formText[key]} onChange={pushFormOnChange(key)} />
+                                        <input type="submit" value="追加" />
+                                        {pushedOr[key] ? "追加しました！" : ""}
+                                    </form>
+                                    : ""}
+                                {formRealState() ?
                                     <form onSubmit={pushSubmit(key)}>
                                         <input type="text" value={formText[key]} onChange={pushFormOnChange(key)} />
                                         <input type="submit" value="追加" />
@@ -442,8 +473,8 @@ const Wn = ({ wn, view, setView, showPush, showHyper }: { wn: any, view: RootVie
                 <button onClick={toggleshowMore("inherited")} className={showMore.inherited?"open":"close"}>{toggleWord(showMore.inherited)}遡上</button>
             </div>
             <div className="more" >
-                {showMore.hypo ? <Hyp of={wn} isHypo={true} view={view} setView={setView} showPush={showPush} /> : ""}
-                {showMore.hyper ? <Hyp of={wn} isHypo={false} view={view} setView={setView} showPush={showPush} showHyper={showMore.inherited} /> : ""}
+                {showMore.hypo ? <Hyp of={wn} isHypo={true} view={view} setView={setView} showPush={showPush} setShowPush={setShowPush} showHyper={showMore.hypo} form={form} setForm={setForm} /> : ""}
+                {showMore.hyper ? <Hyp of={wn} isHypo={false} view={view} setView={setView} showPush={showPush} setShowPush={setShowPush} showHyper={showMore.inherited} form={form} setForm={setForm} /> : ""}
             </div>
         </div>
     )
