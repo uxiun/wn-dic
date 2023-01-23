@@ -1,21 +1,25 @@
 org: uxiun
 app: apollo-lambda
 # serverless.yml
-
 service: apollo-lambda
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs16.x
+  httpApi:
+    cors: true
 functions:
   graphql:
-    # this is formatted as <FILENAME>.<HANDLER>
-    handler: graphql.graphqlHandler
+    # Make sure your file path is correct!
+    # (e.g., if your file is in the root folder use server.graphqlHandler )
+    # The format is: <FILENAME>.<HANDLER>
+    handler: pages/api/graphql.graphqlHandler # highlight-line
     events:
-    - http:
-        path: /
-        method: post
-        cors: true
-    - http:
-        path: /
-        method: get
-        cors: true
+      - httpApi:
+          path: /
+          method: POST
+      - httpApi:
+          path: /
+          method: GET
+# Omit the following lines if you aren't using TS!
+plugins:
+  - serverless-plugin-typescript

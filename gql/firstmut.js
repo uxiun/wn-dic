@@ -59,7 +59,7 @@ const { performance } = require('perf_hooks');
                 name: y.name,
                 gls: y.gloss,
                 glsjp: y.glossjp,
-                pos: "n",
+                pos: "v",
                 depth: y.depth,
                 childSize: y.children_size,
                 sisonSize: y.ruiseki,
@@ -120,7 +120,7 @@ const { performance } = require('perf_hooks');
     }
 
     const sleep = ms => new Promise(res => setTimeout(res, ms))
-    const dir = "/home/uxiun/w/wn-anki-parser/"
+    const dir = "/home/uxiun/w/wn-anki-parser/verb" //param
     const path = require("path")
     var files = fs.readdirSync(dir)
     const re = /^anki\..*/i
@@ -131,7 +131,7 @@ const { performance } = require('perf_hooks');
             targets.push(fullpath)
         }
     }
-    // console.log(targets)
+    console.log(targets)
     const targets_tameshi = [
         "/home/uxiun/w/wn-anki-parser/anki.action.n.01.yaml"
     ]
@@ -156,7 +156,7 @@ const { performance } = require('perf_hooks');
         '/home/uxiun/w/wn-anki-parser/anki.relation.n.01.yaml',
     ]
     // return 0
-    for (const filename of restart_targets) {
+    for (const filename of targets) { //param
         const startTime = performance.now();
         const dic = loadYamlFile(filename)
         let counter = 0

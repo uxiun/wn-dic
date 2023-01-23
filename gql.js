@@ -21,6 +21,7 @@ type User {
     name: String!
     id: ID! @id
     push: [Push!]! @relationship(type: "byuser", direction: OUT)
+    synsets: [wn!]! @relationship(type: "create-synset", direction: OUT)
 }
 
 type Push {
@@ -32,11 +33,11 @@ type Push {
     lmsjp: [wn!]! @relationship(type: "lmsjp", direction: OUT)
 }
 type wn {
-    id: String
-    spell: String!
-    seps: [String!]!
-    sep: String!
-    name: String!
+    id: ID! @id
+    spell: String
+    seps: [String!]
+    sep: String
+    name: String
     glo: String!
     glojp: String!
     lm: String
@@ -54,12 +55,19 @@ type wn {
     depth: Int!
     childSize: Int!
     sisonSize: Int!
-    syndex: Int!
-    princetonLink: String!
-    gsrc: String!
-    dsrc: String!
+    syndex: Int
+    princetonLink: String
+    gsrc: String
+    dsrc: String
+    identicalsOut: [wn!]! @relationship(type: "identical", direction: OUT)
+    identicalsIn: [wn!]! @relationship(type: "identical", direction: IN)
+    aliases: [String!]
+    aliaseps: [[String!]!]
     jwlk: [wn!]! @relationship(type: "kj", direction: OUT, properties: "Rel")
     jwlj: [wn!]! @relationship(type: "kj", direction: IN, properties: "Rel")
+    relk: [wn!]! @relationship(type: "j", direction: OUT, properties: "Rel")
+    relj: [wn!]! @relationship(type: "j", direction: IN, properties: "Rel")
+    createdBy: User @relationship(type: "create-synset", direction: IN)
     createdAt: DateTime @timestamp(operations: [CREATE])
     lastModified: DateTime @timestamp(operations: [CREATE, UPDATE])
     updateCount: Int @callback(operations: [UPDATE], name: "upd")

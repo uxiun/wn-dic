@@ -1,0 +1,3950 @@
+type Query {
+  tameshis(where: tameshiWhere, options: tameshiOptions): [tameshi!]!
+  tameshisAggregate(where: tameshiWhere): tameshiAggregateSelection!
+  tameshisConnection(first: Int, after: String, where: tameshiWhere, sort: [tameshiSort]): TameshisConnection!
+  users(where: UserWhere, options: UserOptions): [User!]!
+  usersAggregate(where: UserWhere): UserAggregateSelection!
+  usersConnection(first: Int, after: String, where: UserWhere, sort: [UserSort]): UsersConnection!
+  pushes(where: PushWhere, options: PushOptions): [Push!]!
+  pushesAggregate(where: PushWhere): PushAggregateSelection!
+  pushesConnection(first: Int, after: String, where: PushWhere, sort: [PushSort]): PushesConnection!
+  wns(where: wnWhere, options: wnOptions): [wn!]!
+  wnsAggregate(where: wnWhere): wnAggregateSelection!
+  wnsConnection(first: Int, after: String, where: wnWhere, sort: [wnSort]): WnsConnection!
+}
+
+type Mutation {
+  createTameshis(input: [tameshiCreateInput!]!): CreateTameshisMutationResponse!
+  deleteTameshis(where: tameshiWhere, delete: tameshiDeleteInput): DeleteInfo!
+  updateTameshis(where: tameshiWhere, update: tameshiUpdateInput, connect: tameshiConnectInput, disconnect: tameshiDisconnectInput, create: tameshiRelationInput, delete: tameshiDeleteInput): UpdateTameshisMutationResponse!
+  createUsers(input: [UserCreateInput!]!): CreateUsersMutationResponse!
+  deleteUsers(where: UserWhere, delete: UserDeleteInput): DeleteInfo!
+  updateUsers(where: UserWhere, update: UserUpdateInput, connect: UserConnectInput, disconnect: UserDisconnectInput, create: UserRelationInput, delete: UserDeleteInput, connectOrCreate: UserConnectOrCreateInput): UpdateUsersMutationResponse!
+  createPushes(input: [PushCreateInput!]!): CreatePushesMutationResponse!
+  deletePushes(where: PushWhere, delete: PushDeleteInput): DeleteInfo!
+  updatePushes(where: PushWhere, update: PushUpdateInput, connect: PushConnectInput, disconnect: PushDisconnectInput, create: PushRelationInput, delete: PushDeleteInput, connectOrCreate: PushConnectOrCreateInput): UpdatePushesMutationResponse!
+  createWns(input: [wnCreateInput!]!): CreateWnsMutationResponse!
+  deleteWns(where: wnWhere, delete: wnDeleteInput): DeleteInfo!
+  updateWns(where: wnWhere, update: wnUpdateInput, connect: wnConnectInput, disconnect: wnDisconnectInput, create: wnRelationInput, delete: wnDeleteInput, connectOrCreate: wnConnectOrCreateInput): UpdateWnsMutationResponse!
+}
+
+# """A date and time, represented as an ISO-8601 string"""
+scalar AWSDateTime
+
+enum SortDirection {
+# """Sort by field values in ascending order."""
+  ASC
+
+# """Sort by field values in descending order."""
+  DESC
+}
+
+interface Rel {
+  k: [String!]
+}
+
+type CreateInfo {
+  bookmark: String
+  nodesCreated: Int!
+  relationshipsCreated: Int!
+}
+
+type CreatePushesMutationResponse {
+  info: CreateInfo!
+  pushes: [Push!]!
+}
+
+type CreateTameshisMutationResponse {
+  info: CreateInfo!
+  tameshis: [tameshi!]!
+}
+
+type CreateUsersMutationResponse {
+  info: CreateInfo!
+  users: [User!]!
+}
+
+type CreateWnsMutationResponse {
+  info: CreateInfo!
+  wns: [wn!]!
+}
+
+type AWSDateTimeAggregateSelectionNullable {
+  min: AWSDateTime
+  max: AWSDateTime
+}
+
+type DeleteInfo {
+  bookmark: String
+  nodesDeleted: Int!
+  relationshipsDeleted: Int!
+}
+
+type IDAggregateSelectionNonNullable {
+  shortest: ID!
+  longest: ID!
+}
+
+type IntAggregateSelectionNonNullable {
+  max: Int!
+  min: Int!
+  average: Float!
+  sum: Int!
+}
+
+type IntAggregateSelectionNullable {
+  max: Int
+  min: Int
+  average: Float
+  sum: Int
+}
+
+# """Pagination information (Relay)"""
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Push {
+  push: String!
+  lang: String!
+  id: ID!
+  pusher(where: UserWhere, options: UserOptions, directed: Boolean = true): User!
+  pusherAggregate(where: UserWhere, directed: Boolean = true): PushUserPusherAggregationSelection
+  lms(where: wnWhere, options: wnOptions, directed: Boolean = true): [wn!]!
+  lmsAggregate(where: wnWhere, directed: Boolean = true): PushwnLmsAggregationSelection
+  lmsjp(where: wnWhere, options: wnOptions, directed: Boolean = true): [wn!]!
+  lmsjpAggregate(where: wnWhere, directed: Boolean = true): PushwnLmsjpAggregationSelection
+  pusherConnection(where: PushPusherConnectionWhere, first: Int, after: String, directed: Boolean = true, sort: [PushPusherConnectionSort!]): PushPusherConnection!
+  lmsConnection(where: PushLmsConnectionWhere, first: Int, after: String, directed: Boolean = true, sort: [PushLmsConnectionSort!]): PushLmsConnection!
+  lmsjpConnection(where: PushLmsjpConnectionWhere, first: Int, after: String, directed: Boolean = true, sort: [PushLmsjpConnectionSort!]): PushLmsjpConnection!
+}
+
+type PushAggregateSelection {
+  count: Int!
+  push: StringAggregateSelectionNonNullable!
+  lang: StringAggregateSelectionNonNullable!
+  id: IDAggregateSelectionNonNullable!
+}
+
+type PushEdge {
+  cursor: String!
+  node: Push!
+}
+
+type PushesConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  edges: [PushEdge!]!
+}
+
+type PushLmsConnection {
+  edges: [PushLmsRelationship!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type PushLmsjpConnection {
+  edges: [PushLmsjpRelationship!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type PushLmsjpRelationship {
+  cursor: String!
+  node: wn!
+}
+
+type PushLmsRelationship {
+  cursor: String!
+  node: wn!
+}
+
+type PushPusherConnection {
+  edges: [PushPusherRelationship!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type PushPusherRelationship {
+  cursor: String!
+  node: User!
+}
+
+type PushUserPusherAggregationSelection {
+  count: Int!
+  node: PushUserPusherNodeAggregateSelection
+}
+
+type PushUserPusherNodeAggregateSelection {
+  name: StringAggregateSelectionNonNullable!
+  id: IDAggregateSelectionNonNullable!
+}
+
+type PushwnLmsAggregationSelection {
+  count: Int!
+  node: PushwnLmsNodeAggregateSelection
+}
+
+type PushwnLmsjpAggregationSelection {
+  count: Int!
+  node: PushwnLmsjpNodeAggregateSelection
+}
+
+type PushwnLmsjpNodeAggregateSelection {
+  id: StringAggregateSelectionNullable!
+  spell: StringAggregateSelectionNonNullable!
+  sep: StringAggregateSelectionNonNullable!
+  name: StringAggregateSelectionNonNullable!
+  glo: StringAggregateSelectionNonNullable!
+  glojp: StringAggregateSelectionNonNullable!
+  lm: StringAggregateSelectionNullable!
+  lmjp: StringAggregateSelectionNullable!
+  ex: StringAggregateSelectionNullable!
+  exjp: StringAggregateSelectionNullable!
+  pos: StringAggregateSelectionNullable!
+  depth: IntAggregateSelectionNonNullable!
+  childSize: IntAggregateSelectionNonNullable!
+  sisonSize: IntAggregateSelectionNonNullable!
+  syndex: IntAggregateSelectionNullable!
+  princetonLink: StringAggregateSelectionNullable!
+  gsrc: StringAggregateSelectionNullable!
+  dsrc: StringAggregateSelectionNullable!
+  updateCount: IntAggregateSelectionNullable!
+  createdAt: AWSDateTimeAggregateSelectionNullable!
+  lastModified: AWSDateTimeAggregateSelectionNullable!
+}
+
+type PushwnLmsNodeAggregateSelection {
+  id: StringAggregateSelectionNullable!
+  spell: StringAggregateSelectionNonNullable!
+  sep: StringAggregateSelectionNonNullable!
+  name: StringAggregateSelectionNonNullable!
+  glo: StringAggregateSelectionNonNullable!
+  glojp: StringAggregateSelectionNonNullable!
+  lm: StringAggregateSelectionNullable!
+  lmjp: StringAggregateSelectionNullable!
+  ex: StringAggregateSelectionNullable!
+  exjp: StringAggregateSelectionNullable!
+  pos: StringAggregateSelectionNullable!
+  depth: IntAggregateSelectionNonNullable!
+  childSize: IntAggregateSelectionNonNullable!
+  sisonSize: IntAggregateSelectionNonNullable!
+  syndex: IntAggregateSelectionNullable!
+  princetonLink: StringAggregateSelectionNullable!
+  gsrc: StringAggregateSelectionNullable!
+  dsrc: StringAggregateSelectionNullable!
+  updateCount: IntAggregateSelectionNullable!
+  createdAt: AWSDateTimeAggregateSelectionNullable!
+  lastModified: AWSDateTimeAggregateSelectionNullable!
+}
+
+type StringAggregateSelectionNonNullable {
+  shortest: String!
+  longest: String!
+}
+
+type StringAggregateSelectionNullable {
+  shortest: String
+  longest: String
+}
+
+type tameshi {
+  spell: String!
+  lists: [String!]!
+  from(where: tameshiWhere, options: tameshiOptions, directed: Boolean = true): [tameshi!]!
+  fromAggregate(where: tameshiWhere, directed: Boolean = true): tameshitameshiFromAggregationSelection
+  fromConnection(where: tameshiFromConnectionWhere, first: Int, after: String, directed: Boolean = true, sort: [tameshiFromConnectionSort!]): tameshiFromConnection!
+}
+
+type tameshiAggregateSelection {
+  count: Int!
+  spell: StringAggregateSelectionNonNullable!
+}
+
+type tameshiEdge {
+  cursor: String!
+  node: tameshi!
+}
+
+type tameshiFromConnection {
+  edges: [tameshiFromRelationship!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type tameshiFromRelationship {
+  cursor: String!
+  node: tameshi!
+}
+
+type TameshisConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  edges: [tameshiEdge!]!
+}
+
+type tameshitameshiFromAggregationSelection {
+  count: Int!
+  node: tameshitameshiFromNodeAggregateSelection
+}
+
+type tameshitameshiFromNodeAggregateSelection {
+  spell: StringAggregateSelectionNonNullable!
+}
+
+type UpdateInfo {
+  bookmark: String
+  nodesCreated: Int!
+  nodesDeleted: Int!
+  relationshipsCreated: Int!
+  relationshipsDeleted: Int!
+}
+
+type UpdatePushesMutationResponse {
+  info: UpdateInfo!
+  pushes: [Push!]!
+}
+
+type UpdateTameshisMutationResponse {
+  info: UpdateInfo!
+  tameshis: [tameshi!]!
+}
+
+type UpdateUsersMutationResponse {
+  info: UpdateInfo!
+  users: [User!]!
+}
+
+type UpdateWnsMutationResponse {
+  info: UpdateInfo!
+  wns: [wn!]!
+}
+
+type User {
+  name: String!
+  id: ID!
+  push(where: PushWhere, options: PushOptions, directed: Boolean = true): [Push!]!
+  pushAggregate(where: PushWhere, directed: Boolean = true): UserPushPushAggregationSelection
+  pushConnection(where: UserPushConnectionWhere, first: Int, after: String, directed: Boolean = true, sort: [UserPushConnectionSort!]): UserPushConnection!
+}
+
+type UserAggregateSelection {
+  count: Int!
+  name: StringAggregateSelectionNonNullable!
+  id: IDAggregateSelectionNonNullable!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User!
+}
+
+type UserPushConnection {
+  edges: [UserPushRelationship!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type UserPushPushAggregationSelection {
+  count: Int!
+  node: UserPushPushNodeAggregateSelection
+}
+
+type UserPushPushNodeAggregateSelection {
+  push: StringAggregateSelectionNonNullable!
+  lang: StringAggregateSelectionNonNullable!
+  id: IDAggregateSelectionNonNullable!
+}
+
+type UserPushRelationship {
+  cursor: String!
+  node: Push!
+}
+
+type UsersConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  edges: [UserEdge!]!
+}
+
+type wn {
+  id: String
+  spell: String!
+  seps: [String!]!
+  sep: String!
+  name: String!
+  glo: String!
+  glojp: String!
+  lm: String
+  lmjp: String
+  lms: [String]
+  lmsjp: [String]
+  ex: String
+  exjp: String
+  exs: [String]
+  exsjp: [String]
+  pos: String
+  depth: Int!
+  childSize: Int!
+  sisonSize: Int!
+  syndex: Int
+  princetonLink: String
+  gsrc: String
+  dsrc: String
+  updateCount: Int
+  keifu: [wn!]!
+  createdAt: AWSDateTime
+  lastModified: AWSDateTime
+  lmspush(where: PushWhere, options: PushOptions, directed: Boolean = true): [Push!]!
+  lmspushAggregate(where: PushWhere, directed: Boolean = true): wnPushLmspushAggregationSelection
+  lmsjppush(where: PushWhere, options: PushOptions, directed: Boolean = true): [Push!]!
+  lmsjppushAggregate(where: PushWhere, directed: Boolean = true): wnPushLmsjppushAggregationSelection
+  jwlk(where: wnWhere, options: wnOptions, directed: Boolean = true): [wn!]!
+  jwlkAggregate(where: wnWhere, directed: Boolean = true): wnwnJwlkAggregationSelection
+  jwlj(where: wnWhere, options: wnOptions, directed: Boolean = true): [wn!]!
+  jwljAggregate(where: wnWhere, directed: Boolean = true): wnwnJwljAggregationSelection
+  lmspushConnection(where: wnLmspushConnectionWhere, first: Int, after: String, directed: Boolean = true, sort: [wnLmspushConnectionSort!]): wnLmspushConnection!
+  lmsjppushConnection(where: wnLmsjppushConnectionWhere, first: Int, after: String, directed: Boolean = true, sort: [wnLmsjppushConnectionSort!]): wnLmsjppushConnection!
+  jwlkConnection(where: wnJwlkConnectionWhere, first: Int, after: String, directed: Boolean = true, sort: [wnJwlkConnectionSort!]): wnJwlkConnection!
+  jwljConnection(where: wnJwljConnectionWhere, first: Int, after: String, directed: Boolean = true, sort: [wnJwljConnectionSort!]): wnJwljConnection!
+}
+
+type wnAggregateSelection {
+  count: Int!
+  id: StringAggregateSelectionNullable!
+  spell: StringAggregateSelectionNonNullable!
+  sep: StringAggregateSelectionNonNullable!
+  name: StringAggregateSelectionNonNullable!
+  glo: StringAggregateSelectionNonNullable!
+  glojp: StringAggregateSelectionNonNullable!
+  lm: StringAggregateSelectionNullable!
+  lmjp: StringAggregateSelectionNullable!
+  ex: StringAggregateSelectionNullable!
+  exjp: StringAggregateSelectionNullable!
+  pos: StringAggregateSelectionNullable!
+  depth: IntAggregateSelectionNonNullable!
+  childSize: IntAggregateSelectionNonNullable!
+  sisonSize: IntAggregateSelectionNonNullable!
+  syndex: IntAggregateSelectionNullable!
+  princetonLink: StringAggregateSelectionNullable!
+  gsrc: StringAggregateSelectionNullable!
+  dsrc: StringAggregateSelectionNullable!
+  updateCount: IntAggregateSelectionNullable!
+  createdAt: AWSDateTimeAggregateSelectionNullable!
+  lastModified: AWSDateTimeAggregateSelectionNullable!
+}
+
+type wnEdge {
+  cursor: String!
+  node: wn!
+}
+
+type wnJwljConnection {
+  edges: [wnJwljRelationship!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type wnJwljRelationship implements Rel {
+  cursor: String!
+  node: wn!
+  k: [String!]
+}
+
+type wnJwlkConnection {
+  edges: [wnJwlkRelationship!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type wnJwlkRelationship implements Rel {
+  cursor: String!
+  node: wn!
+  k: [String!]
+}
+
+type wnLmsjppushConnection {
+  edges: [wnLmsjppushRelationship!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type wnLmsjppushRelationship {
+  cursor: String!
+  node: Push!
+}
+
+type wnLmspushConnection {
+  edges: [wnLmspushRelationship!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type wnLmspushRelationship {
+  cursor: String!
+  node: Push!
+}
+
+type wnPushLmsjppushAggregationSelection {
+  count: Int!
+  node: wnPushLmsjppushNodeAggregateSelection
+}
+
+type wnPushLmsjppushNodeAggregateSelection {
+  push: StringAggregateSelectionNonNullable!
+  lang: StringAggregateSelectionNonNullable!
+  id: IDAggregateSelectionNonNullable!
+}
+
+type wnPushLmspushAggregationSelection {
+  count: Int!
+  node: wnPushLmspushNodeAggregateSelection
+}
+
+type wnPushLmspushNodeAggregateSelection {
+  push: StringAggregateSelectionNonNullable!
+  lang: StringAggregateSelectionNonNullable!
+  id: IDAggregateSelectionNonNullable!
+}
+
+type WnsConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  edges: [wnEdge!]!
+}
+
+type wnwnJwljAggregationSelection {
+  count: Int!
+  node: wnwnJwljNodeAggregateSelection
+}
+
+type wnwnJwljNodeAggregateSelection {
+  id: StringAggregateSelectionNullable!
+  spell: StringAggregateSelectionNonNullable!
+  sep: StringAggregateSelectionNonNullable!
+  name: StringAggregateSelectionNonNullable!
+  glo: StringAggregateSelectionNonNullable!
+  glojp: StringAggregateSelectionNonNullable!
+  lm: StringAggregateSelectionNullable!
+  lmjp: StringAggregateSelectionNullable!
+  ex: StringAggregateSelectionNullable!
+  exjp: StringAggregateSelectionNullable!
+  pos: StringAggregateSelectionNullable!
+  depth: IntAggregateSelectionNonNullable!
+  childSize: IntAggregateSelectionNonNullable!
+  sisonSize: IntAggregateSelectionNonNullable!
+  syndex: IntAggregateSelectionNullable!
+  princetonLink: StringAggregateSelectionNullable!
+  gsrc: StringAggregateSelectionNullable!
+  dsrc: StringAggregateSelectionNullable!
+  updateCount: IntAggregateSelectionNullable!
+  createdAt: AWSDateTimeAggregateSelectionNullable!
+  lastModified: AWSDateTimeAggregateSelectionNullable!
+}
+
+type wnwnJwlkAggregationSelection {
+  count: Int!
+  node: wnwnJwlkNodeAggregateSelection
+}
+
+type wnwnJwlkNodeAggregateSelection {
+  id: StringAggregateSelectionNullable!
+  spell: StringAggregateSelectionNonNullable!
+  sep: StringAggregateSelectionNonNullable!
+  name: StringAggregateSelectionNonNullable!
+  glo: StringAggregateSelectionNonNullable!
+  glojp: StringAggregateSelectionNonNullable!
+  lm: StringAggregateSelectionNullable!
+  lmjp: StringAggregateSelectionNullable!
+  ex: StringAggregateSelectionNullable!
+  exjp: StringAggregateSelectionNullable!
+  pos: StringAggregateSelectionNullable!
+  depth: IntAggregateSelectionNonNullable!
+  childSize: IntAggregateSelectionNonNullable!
+  sisonSize: IntAggregateSelectionNonNullable!
+  syndex: IntAggregateSelectionNullable!
+  princetonLink: StringAggregateSelectionNullable!
+  gsrc: StringAggregateSelectionNullable!
+  dsrc: StringAggregateSelectionNullable!
+  updateCount: IntAggregateSelectionNullable!
+  createdAt: AWSDateTimeAggregateSelectionNullable!
+  lastModified: AWSDateTimeAggregateSelectionNullable!
+}
+
+input PushConnectInput {
+  pusher: PushPusherConnectFieldInput
+  lms: [PushLmsConnectFieldInput!]
+  lmsjp: [PushLmsjpConnectFieldInput!]
+}
+
+input PushConnectOrCreateInput {
+  pusher: PushPusherConnectOrCreateFieldInput
+}
+
+input PushConnectOrCreateWhere {
+  node: PushUniqueWhere!
+}
+
+input PushConnectWhere {
+  node: PushWhere!
+}
+
+input PushCreateInput {
+  push: String!
+  lang: String!
+  pusher: PushPusherFieldInput
+  lms: PushLmsFieldInput
+  lmsjp: PushLmsjpFieldInput
+}
+
+input PushDeleteInput {
+  pusher: PushPusherDeleteFieldInput
+  lms: [PushLmsDeleteFieldInput!]
+  lmsjp: [PushLmsjpDeleteFieldInput!]
+}
+
+input PushDisconnectInput {
+  pusher: PushPusherDisconnectFieldInput
+  lms: [PushLmsDisconnectFieldInput!]
+  lmsjp: [PushLmsjpDisconnectFieldInput!]
+}
+
+input PushLmsAggregateInput {
+  count: Int
+  count_LT: Int
+  count_LTE: Int
+  count_GT: Int
+  count_GTE: Int
+  AND: [PushLmsAggregateInput!]
+  OR: [PushLmsAggregateInput!]
+  node: PushLmsNodeAggregationWhereInput
+}
+
+input PushLmsConnectFieldInput {
+  where: wnConnectWhere
+  connect: [wnConnectInput!]
+}
+
+input PushLmsConnectionSort {
+  node: wnSort
+}
+
+input PushLmsConnectionWhere {
+  AND: [PushLmsConnectionWhere!]
+  OR: [PushLmsConnectionWhere!]
+  node: wnWhere
+  node_NOT: wnWhere
+}
+
+input PushLmsCreateFieldInput {
+  node: wnCreateInput!
+}
+
+input PushLmsDeleteFieldInput {
+  where: PushLmsConnectionWhere
+  delete: wnDeleteInput
+}
+
+input PushLmsDisconnectFieldInput {
+  where: PushLmsConnectionWhere
+  disconnect: wnDisconnectInput
+}
+
+input PushLmsFieldInput {
+  create: [PushLmsCreateFieldInput!]
+  connect: [PushLmsConnectFieldInput!]
+}
+
+input PushLmsjpAggregateInput {
+  count: Int
+  count_LT: Int
+  count_LTE: Int
+  count_GT: Int
+  count_GTE: Int
+  AND: [PushLmsjpAggregateInput!]
+  OR: [PushLmsjpAggregateInput!]
+  node: PushLmsjpNodeAggregationWhereInput
+}
+
+input PushLmsjpConnectFieldInput {
+  where: wnConnectWhere
+  connect: [wnConnectInput!]
+}
+
+input PushLmsjpConnectionSort {
+  node: wnSort
+}
+
+input PushLmsjpConnectionWhere {
+  AND: [PushLmsjpConnectionWhere!]
+  OR: [PushLmsjpConnectionWhere!]
+  node: wnWhere
+  node_NOT: wnWhere
+}
+
+input PushLmsjpCreateFieldInput {
+  node: wnCreateInput!
+}
+
+input PushLmsjpDeleteFieldInput {
+  where: PushLmsjpConnectionWhere
+  delete: wnDeleteInput
+}
+
+input PushLmsjpDisconnectFieldInput {
+  where: PushLmsjpConnectionWhere
+  disconnect: wnDisconnectInput
+}
+
+input PushLmsjpFieldInput {
+  create: [PushLmsjpCreateFieldInput!]
+  connect: [PushLmsjpConnectFieldInput!]
+}
+
+input PushLmsjpNodeAggregationWhereInput {
+  AND: [PushLmsjpNodeAggregationWhereInput!]
+  OR: [PushLmsjpNodeAggregationWhereInput!]
+  id_EQUAL: String
+  id_AVERAGE_EQUAL: Float
+  id_LONGEST_EQUAL: Int
+  id_SHORTEST_EQUAL: Int
+  id_GT: Int
+  id_AVERAGE_GT: Float
+  id_LONGEST_GT: Int
+  id_SHORTEST_GT: Int
+  id_GTE: Int
+  id_AVERAGE_GTE: Float
+  id_LONGEST_GTE: Int
+  id_SHORTEST_GTE: Int
+  id_LT: Int
+  id_AVERAGE_LT: Float
+  id_LONGEST_LT: Int
+  id_SHORTEST_LT: Int
+  id_LTE: Int
+  id_AVERAGE_LTE: Float
+  id_LONGEST_LTE: Int
+  id_SHORTEST_LTE: Int
+  spell_EQUAL: String
+  spell_AVERAGE_EQUAL: Float
+  spell_LONGEST_EQUAL: Int
+  spell_SHORTEST_EQUAL: Int
+  spell_GT: Int
+  spell_AVERAGE_GT: Float
+  spell_LONGEST_GT: Int
+  spell_SHORTEST_GT: Int
+  spell_GTE: Int
+  spell_AVERAGE_GTE: Float
+  spell_LONGEST_GTE: Int
+  spell_SHORTEST_GTE: Int
+  spell_LT: Int
+  spell_AVERAGE_LT: Float
+  spell_LONGEST_LT: Int
+  spell_SHORTEST_LT: Int
+  spell_LTE: Int
+  spell_AVERAGE_LTE: Float
+  spell_LONGEST_LTE: Int
+  spell_SHORTEST_LTE: Int
+  sep_EQUAL: String
+  sep_AVERAGE_EQUAL: Float
+  sep_LONGEST_EQUAL: Int
+  sep_SHORTEST_EQUAL: Int
+  sep_GT: Int
+  sep_AVERAGE_GT: Float
+  sep_LONGEST_GT: Int
+  sep_SHORTEST_GT: Int
+  sep_GTE: Int
+  sep_AVERAGE_GTE: Float
+  sep_LONGEST_GTE: Int
+  sep_SHORTEST_GTE: Int
+  sep_LT: Int
+  sep_AVERAGE_LT: Float
+  sep_LONGEST_LT: Int
+  sep_SHORTEST_LT: Int
+  sep_LTE: Int
+  sep_AVERAGE_LTE: Float
+  sep_LONGEST_LTE: Int
+  sep_SHORTEST_LTE: Int
+  name_EQUAL: String
+  name_AVERAGE_EQUAL: Float
+  name_LONGEST_EQUAL: Int
+  name_SHORTEST_EQUAL: Int
+  name_GT: Int
+  name_AVERAGE_GT: Float
+  name_LONGEST_GT: Int
+  name_SHORTEST_GT: Int
+  name_GTE: Int
+  name_AVERAGE_GTE: Float
+  name_LONGEST_GTE: Int
+  name_SHORTEST_GTE: Int
+  name_LT: Int
+  name_AVERAGE_LT: Float
+  name_LONGEST_LT: Int
+  name_SHORTEST_LT: Int
+  name_LTE: Int
+  name_AVERAGE_LTE: Float
+  name_LONGEST_LTE: Int
+  name_SHORTEST_LTE: Int
+  glo_EQUAL: String
+  glo_AVERAGE_EQUAL: Float
+  glo_LONGEST_EQUAL: Int
+  glo_SHORTEST_EQUAL: Int
+  glo_GT: Int
+  glo_AVERAGE_GT: Float
+  glo_LONGEST_GT: Int
+  glo_SHORTEST_GT: Int
+  glo_GTE: Int
+  glo_AVERAGE_GTE: Float
+  glo_LONGEST_GTE: Int
+  glo_SHORTEST_GTE: Int
+  glo_LT: Int
+  glo_AVERAGE_LT: Float
+  glo_LONGEST_LT: Int
+  glo_SHORTEST_LT: Int
+  glo_LTE: Int
+  glo_AVERAGE_LTE: Float
+  glo_LONGEST_LTE: Int
+  glo_SHORTEST_LTE: Int
+  glojp_EQUAL: String
+  glojp_AVERAGE_EQUAL: Float
+  glojp_LONGEST_EQUAL: Int
+  glojp_SHORTEST_EQUAL: Int
+  glojp_GT: Int
+  glojp_AVERAGE_GT: Float
+  glojp_LONGEST_GT: Int
+  glojp_SHORTEST_GT: Int
+  glojp_GTE: Int
+  glojp_AVERAGE_GTE: Float
+  glojp_LONGEST_GTE: Int
+  glojp_SHORTEST_GTE: Int
+  glojp_LT: Int
+  glojp_AVERAGE_LT: Float
+  glojp_LONGEST_LT: Int
+  glojp_SHORTEST_LT: Int
+  glojp_LTE: Int
+  glojp_AVERAGE_LTE: Float
+  glojp_LONGEST_LTE: Int
+  glojp_SHORTEST_LTE: Int
+  lm_EQUAL: String
+  lm_AVERAGE_EQUAL: Float
+  lm_LONGEST_EQUAL: Int
+  lm_SHORTEST_EQUAL: Int
+  lm_GT: Int
+  lm_AVERAGE_GT: Float
+  lm_LONGEST_GT: Int
+  lm_SHORTEST_GT: Int
+  lm_GTE: Int
+  lm_AVERAGE_GTE: Float
+  lm_LONGEST_GTE: Int
+  lm_SHORTEST_GTE: Int
+  lm_LT: Int
+  lm_AVERAGE_LT: Float
+  lm_LONGEST_LT: Int
+  lm_SHORTEST_LT: Int
+  lm_LTE: Int
+  lm_AVERAGE_LTE: Float
+  lm_LONGEST_LTE: Int
+  lm_SHORTEST_LTE: Int
+  lmjp_EQUAL: String
+  lmjp_AVERAGE_EQUAL: Float
+  lmjp_LONGEST_EQUAL: Int
+  lmjp_SHORTEST_EQUAL: Int
+  lmjp_GT: Int
+  lmjp_AVERAGE_GT: Float
+  lmjp_LONGEST_GT: Int
+  lmjp_SHORTEST_GT: Int
+  lmjp_GTE: Int
+  lmjp_AVERAGE_GTE: Float
+  lmjp_LONGEST_GTE: Int
+  lmjp_SHORTEST_GTE: Int
+  lmjp_LT: Int
+  lmjp_AVERAGE_LT: Float
+  lmjp_LONGEST_LT: Int
+  lmjp_SHORTEST_LT: Int
+  lmjp_LTE: Int
+  lmjp_AVERAGE_LTE: Float
+  lmjp_LONGEST_LTE: Int
+  lmjp_SHORTEST_LTE: Int
+  ex_EQUAL: String
+  ex_AVERAGE_EQUAL: Float
+  ex_LONGEST_EQUAL: Int
+  ex_SHORTEST_EQUAL: Int
+  ex_GT: Int
+  ex_AVERAGE_GT: Float
+  ex_LONGEST_GT: Int
+  ex_SHORTEST_GT: Int
+  ex_GTE: Int
+  ex_AVERAGE_GTE: Float
+  ex_LONGEST_GTE: Int
+  ex_SHORTEST_GTE: Int
+  ex_LT: Int
+  ex_AVERAGE_LT: Float
+  ex_LONGEST_LT: Int
+  ex_SHORTEST_LT: Int
+  ex_LTE: Int
+  ex_AVERAGE_LTE: Float
+  ex_LONGEST_LTE: Int
+  ex_SHORTEST_LTE: Int
+  exjp_EQUAL: String
+  exjp_AVERAGE_EQUAL: Float
+  exjp_LONGEST_EQUAL: Int
+  exjp_SHORTEST_EQUAL: Int
+  exjp_GT: Int
+  exjp_AVERAGE_GT: Float
+  exjp_LONGEST_GT: Int
+  exjp_SHORTEST_GT: Int
+  exjp_GTE: Int
+  exjp_AVERAGE_GTE: Float
+  exjp_LONGEST_GTE: Int
+  exjp_SHORTEST_GTE: Int
+  exjp_LT: Int
+  exjp_AVERAGE_LT: Float
+  exjp_LONGEST_LT: Int
+  exjp_SHORTEST_LT: Int
+  exjp_LTE: Int
+  exjp_AVERAGE_LTE: Float
+  exjp_LONGEST_LTE: Int
+  exjp_SHORTEST_LTE: Int
+  pos_EQUAL: String
+  pos_AVERAGE_EQUAL: Float
+  pos_LONGEST_EQUAL: Int
+  pos_SHORTEST_EQUAL: Int
+  pos_GT: Int
+  pos_AVERAGE_GT: Float
+  pos_LONGEST_GT: Int
+  pos_SHORTEST_GT: Int
+  pos_GTE: Int
+  pos_AVERAGE_GTE: Float
+  pos_LONGEST_GTE: Int
+  pos_SHORTEST_GTE: Int
+  pos_LT: Int
+  pos_AVERAGE_LT: Float
+  pos_LONGEST_LT: Int
+  pos_SHORTEST_LT: Int
+  pos_LTE: Int
+  pos_AVERAGE_LTE: Float
+  pos_LONGEST_LTE: Int
+  pos_SHORTEST_LTE: Int
+  princetonLink_EQUAL: String
+  princetonLink_AVERAGE_EQUAL: Float
+  princetonLink_LONGEST_EQUAL: Int
+  princetonLink_SHORTEST_EQUAL: Int
+  princetonLink_GT: Int
+  princetonLink_AVERAGE_GT: Float
+  princetonLink_LONGEST_GT: Int
+  princetonLink_SHORTEST_GT: Int
+  princetonLink_GTE: Int
+  princetonLink_AVERAGE_GTE: Float
+  princetonLink_LONGEST_GTE: Int
+  princetonLink_SHORTEST_GTE: Int
+  princetonLink_LT: Int
+  princetonLink_AVERAGE_LT: Float
+  princetonLink_LONGEST_LT: Int
+  princetonLink_SHORTEST_LT: Int
+  princetonLink_LTE: Int
+  princetonLink_AVERAGE_LTE: Float
+  princetonLink_LONGEST_LTE: Int
+  princetonLink_SHORTEST_LTE: Int
+  gsrc_EQUAL: String
+  gsrc_AVERAGE_EQUAL: Float
+  gsrc_LONGEST_EQUAL: Int
+  gsrc_SHORTEST_EQUAL: Int
+  gsrc_GT: Int
+  gsrc_AVERAGE_GT: Float
+  gsrc_LONGEST_GT: Int
+  gsrc_SHORTEST_GT: Int
+  gsrc_GTE: Int
+  gsrc_AVERAGE_GTE: Float
+  gsrc_LONGEST_GTE: Int
+  gsrc_SHORTEST_GTE: Int
+  gsrc_LT: Int
+  gsrc_AVERAGE_LT: Float
+  gsrc_LONGEST_LT: Int
+  gsrc_SHORTEST_LT: Int
+  gsrc_LTE: Int
+  gsrc_AVERAGE_LTE: Float
+  gsrc_LONGEST_LTE: Int
+  gsrc_SHORTEST_LTE: Int
+  dsrc_EQUAL: String
+  dsrc_AVERAGE_EQUAL: Float
+  dsrc_LONGEST_EQUAL: Int
+  dsrc_SHORTEST_EQUAL: Int
+  dsrc_GT: Int
+  dsrc_AVERAGE_GT: Float
+  dsrc_LONGEST_GT: Int
+  dsrc_SHORTEST_GT: Int
+  dsrc_GTE: Int
+  dsrc_AVERAGE_GTE: Float
+  dsrc_LONGEST_GTE: Int
+  dsrc_SHORTEST_GTE: Int
+  dsrc_LT: Int
+  dsrc_AVERAGE_LT: Float
+  dsrc_LONGEST_LT: Int
+  dsrc_SHORTEST_LT: Int
+  dsrc_LTE: Int
+  dsrc_AVERAGE_LTE: Float
+  dsrc_LONGEST_LTE: Int
+  dsrc_SHORTEST_LTE: Int
+  depth_EQUAL: Int
+  depth_AVERAGE_EQUAL: Float
+  depth_MIN_EQUAL: Int
+  depth_MAX_EQUAL: Int
+  depth_SUM_EQUAL: Int
+  depth_GT: Int
+  depth_AVERAGE_GT: Float
+  depth_MIN_GT: Int
+  depth_MAX_GT: Int
+  depth_SUM_GT: Int
+  depth_GTE: Int
+  depth_AVERAGE_GTE: Float
+  depth_MIN_GTE: Int
+  depth_MAX_GTE: Int
+  depth_SUM_GTE: Int
+  depth_LT: Int
+  depth_AVERAGE_LT: Float
+  depth_MIN_LT: Int
+  depth_MAX_LT: Int
+  depth_SUM_LT: Int
+  depth_LTE: Int
+  depth_AVERAGE_LTE: Float
+  depth_MIN_LTE: Int
+  depth_MAX_LTE: Int
+  depth_SUM_LTE: Int
+  childSize_EQUAL: Int
+  childSize_AVERAGE_EQUAL: Float
+  childSize_MIN_EQUAL: Int
+  childSize_MAX_EQUAL: Int
+  childSize_SUM_EQUAL: Int
+  childSize_GT: Int
+  childSize_AVERAGE_GT: Float
+  childSize_MIN_GT: Int
+  childSize_MAX_GT: Int
+  childSize_SUM_GT: Int
+  childSize_GTE: Int
+  childSize_AVERAGE_GTE: Float
+  childSize_MIN_GTE: Int
+  childSize_MAX_GTE: Int
+  childSize_SUM_GTE: Int
+  childSize_LT: Int
+  childSize_AVERAGE_LT: Float
+  childSize_MIN_LT: Int
+  childSize_MAX_LT: Int
+  childSize_SUM_LT: Int
+  childSize_LTE: Int
+  childSize_AVERAGE_LTE: Float
+  childSize_MIN_LTE: Int
+  childSize_MAX_LTE: Int
+  childSize_SUM_LTE: Int
+  sisonSize_EQUAL: Int
+  sisonSize_AVERAGE_EQUAL: Float
+  sisonSize_MIN_EQUAL: Int
+  sisonSize_MAX_EQUAL: Int
+  sisonSize_SUM_EQUAL: Int
+  sisonSize_GT: Int
+  sisonSize_AVERAGE_GT: Float
+  sisonSize_MIN_GT: Int
+  sisonSize_MAX_GT: Int
+  sisonSize_SUM_GT: Int
+  sisonSize_GTE: Int
+  sisonSize_AVERAGE_GTE: Float
+  sisonSize_MIN_GTE: Int
+  sisonSize_MAX_GTE: Int
+  sisonSize_SUM_GTE: Int
+  sisonSize_LT: Int
+  sisonSize_AVERAGE_LT: Float
+  sisonSize_MIN_LT: Int
+  sisonSize_MAX_LT: Int
+  sisonSize_SUM_LT: Int
+  sisonSize_LTE: Int
+  sisonSize_AVERAGE_LTE: Float
+  sisonSize_MIN_LTE: Int
+  sisonSize_MAX_LTE: Int
+  sisonSize_SUM_LTE: Int
+  syndex_EQUAL: Int
+  syndex_AVERAGE_EQUAL: Float
+  syndex_MIN_EQUAL: Int
+  syndex_MAX_EQUAL: Int
+  syndex_SUM_EQUAL: Int
+  syndex_GT: Int
+  syndex_AVERAGE_GT: Float
+  syndex_MIN_GT: Int
+  syndex_MAX_GT: Int
+  syndex_SUM_GT: Int
+  syndex_GTE: Int
+  syndex_AVERAGE_GTE: Float
+  syndex_MIN_GTE: Int
+  syndex_MAX_GTE: Int
+  syndex_SUM_GTE: Int
+  syndex_LT: Int
+  syndex_AVERAGE_LT: Float
+  syndex_MIN_LT: Int
+  syndex_MAX_LT: Int
+  syndex_SUM_LT: Int
+  syndex_LTE: Int
+  syndex_AVERAGE_LTE: Float
+  syndex_MIN_LTE: Int
+  syndex_MAX_LTE: Int
+  syndex_SUM_LTE: Int
+  updateCount_EQUAL: Int
+  updateCount_AVERAGE_EQUAL: Float
+  updateCount_MIN_EQUAL: Int
+  updateCount_MAX_EQUAL: Int
+  updateCount_SUM_EQUAL: Int
+  updateCount_GT: Int
+  updateCount_AVERAGE_GT: Float
+  updateCount_MIN_GT: Int
+  updateCount_MAX_GT: Int
+  updateCount_SUM_GT: Int
+  updateCount_GTE: Int
+  updateCount_AVERAGE_GTE: Float
+  updateCount_MIN_GTE: Int
+  updateCount_MAX_GTE: Int
+  updateCount_SUM_GTE: Int
+  updateCount_LT: Int
+  updateCount_AVERAGE_LT: Float
+  updateCount_MIN_LT: Int
+  updateCount_MAX_LT: Int
+  updateCount_SUM_LT: Int
+  updateCount_LTE: Int
+  updateCount_AVERAGE_LTE: Float
+  updateCount_MIN_LTE: Int
+  updateCount_MAX_LTE: Int
+  updateCount_SUM_LTE: Int
+  createdAt_EQUAL: AWSDateTime
+  createdAt_MIN_EQUAL: AWSDateTime
+  createdAt_MAX_EQUAL: AWSDateTime
+  createdAt_GT: AWSDateTime
+  createdAt_MIN_GT: AWSDateTime
+  createdAt_MAX_GT: AWSDateTime
+  createdAt_GTE: AWSDateTime
+  createdAt_MIN_GTE: AWSDateTime
+  createdAt_MAX_GTE: AWSDateTime
+  createdAt_LT: AWSDateTime
+  createdAt_MIN_LT: AWSDateTime
+  createdAt_MAX_LT: AWSDateTime
+  createdAt_LTE: AWSDateTime
+  createdAt_MIN_LTE: AWSDateTime
+  createdAt_MAX_LTE: AWSDateTime
+  lastModified_EQUAL: AWSDateTime
+  lastModified_MIN_EQUAL: AWSDateTime
+  lastModified_MAX_EQUAL: AWSDateTime
+  lastModified_GT: AWSDateTime
+  lastModified_MIN_GT: AWSDateTime
+  lastModified_MAX_GT: AWSDateTime
+  lastModified_GTE: AWSDateTime
+  lastModified_MIN_GTE: AWSDateTime
+  lastModified_MAX_GTE: AWSDateTime
+  lastModified_LT: AWSDateTime
+  lastModified_MIN_LT: AWSDateTime
+  lastModified_MAX_LT: AWSDateTime
+  lastModified_LTE: AWSDateTime
+  lastModified_MIN_LTE: AWSDateTime
+  lastModified_MAX_LTE: AWSDateTime
+}
+
+input PushLmsjpUpdateConnectionInput {
+  node: wnUpdateInput
+}
+
+input PushLmsjpUpdateFieldInput {
+  where: PushLmsjpConnectionWhere
+  update: PushLmsjpUpdateConnectionInput
+  connect: [PushLmsjpConnectFieldInput!]
+  disconnect: [PushLmsjpDisconnectFieldInput!]
+  create: [PushLmsjpCreateFieldInput!]
+  delete: [PushLmsjpDeleteFieldInput!]
+}
+
+input PushLmsNodeAggregationWhereInput {
+  AND: [PushLmsNodeAggregationWhereInput!]
+  OR: [PushLmsNodeAggregationWhereInput!]
+  id_EQUAL: String
+  id_AVERAGE_EQUAL: Float
+  id_LONGEST_EQUAL: Int
+  id_SHORTEST_EQUAL: Int
+  id_GT: Int
+  id_AVERAGE_GT: Float
+  id_LONGEST_GT: Int
+  id_SHORTEST_GT: Int
+  id_GTE: Int
+  id_AVERAGE_GTE: Float
+  id_LONGEST_GTE: Int
+  id_SHORTEST_GTE: Int
+  id_LT: Int
+  id_AVERAGE_LT: Float
+  id_LONGEST_LT: Int
+  id_SHORTEST_LT: Int
+  id_LTE: Int
+  id_AVERAGE_LTE: Float
+  id_LONGEST_LTE: Int
+  id_SHORTEST_LTE: Int
+  spell_EQUAL: String
+  spell_AVERAGE_EQUAL: Float
+  spell_LONGEST_EQUAL: Int
+  spell_SHORTEST_EQUAL: Int
+  spell_GT: Int
+  spell_AVERAGE_GT: Float
+  spell_LONGEST_GT: Int
+  spell_SHORTEST_GT: Int
+  spell_GTE: Int
+  spell_AVERAGE_GTE: Float
+  spell_LONGEST_GTE: Int
+  spell_SHORTEST_GTE: Int
+  spell_LT: Int
+  spell_AVERAGE_LT: Float
+  spell_LONGEST_LT: Int
+  spell_SHORTEST_LT: Int
+  spell_LTE: Int
+  spell_AVERAGE_LTE: Float
+  spell_LONGEST_LTE: Int
+  spell_SHORTEST_LTE: Int
+  sep_EQUAL: String
+  sep_AVERAGE_EQUAL: Float
+  sep_LONGEST_EQUAL: Int
+  sep_SHORTEST_EQUAL: Int
+  sep_GT: Int
+  sep_AVERAGE_GT: Float
+  sep_LONGEST_GT: Int
+  sep_SHORTEST_GT: Int
+  sep_GTE: Int
+  sep_AVERAGE_GTE: Float
+  sep_LONGEST_GTE: Int
+  sep_SHORTEST_GTE: Int
+  sep_LT: Int
+  sep_AVERAGE_LT: Float
+  sep_LONGEST_LT: Int
+  sep_SHORTEST_LT: Int
+  sep_LTE: Int
+  sep_AVERAGE_LTE: Float
+  sep_LONGEST_LTE: Int
+  sep_SHORTEST_LTE: Int
+  name_EQUAL: String
+  name_AVERAGE_EQUAL: Float
+  name_LONGEST_EQUAL: Int
+  name_SHORTEST_EQUAL: Int
+  name_GT: Int
+  name_AVERAGE_GT: Float
+  name_LONGEST_GT: Int
+  name_SHORTEST_GT: Int
+  name_GTE: Int
+  name_AVERAGE_GTE: Float
+  name_LONGEST_GTE: Int
+  name_SHORTEST_GTE: Int
+  name_LT: Int
+  name_AVERAGE_LT: Float
+  name_LONGEST_LT: Int
+  name_SHORTEST_LT: Int
+  name_LTE: Int
+  name_AVERAGE_LTE: Float
+  name_LONGEST_LTE: Int
+  name_SHORTEST_LTE: Int
+  glo_EQUAL: String
+  glo_AVERAGE_EQUAL: Float
+  glo_LONGEST_EQUAL: Int
+  glo_SHORTEST_EQUAL: Int
+  glo_GT: Int
+  glo_AVERAGE_GT: Float
+  glo_LONGEST_GT: Int
+  glo_SHORTEST_GT: Int
+  glo_GTE: Int
+  glo_AVERAGE_GTE: Float
+  glo_LONGEST_GTE: Int
+  glo_SHORTEST_GTE: Int
+  glo_LT: Int
+  glo_AVERAGE_LT: Float
+  glo_LONGEST_LT: Int
+  glo_SHORTEST_LT: Int
+  glo_LTE: Int
+  glo_AVERAGE_LTE: Float
+  glo_LONGEST_LTE: Int
+  glo_SHORTEST_LTE: Int
+  glojp_EQUAL: String
+  glojp_AVERAGE_EQUAL: Float
+  glojp_LONGEST_EQUAL: Int
+  glojp_SHORTEST_EQUAL: Int
+  glojp_GT: Int
+  glojp_AVERAGE_GT: Float
+  glojp_LONGEST_GT: Int
+  glojp_SHORTEST_GT: Int
+  glojp_GTE: Int
+  glojp_AVERAGE_GTE: Float
+  glojp_LONGEST_GTE: Int
+  glojp_SHORTEST_GTE: Int
+  glojp_LT: Int
+  glojp_AVERAGE_LT: Float
+  glojp_LONGEST_LT: Int
+  glojp_SHORTEST_LT: Int
+  glojp_LTE: Int
+  glojp_AVERAGE_LTE: Float
+  glojp_LONGEST_LTE: Int
+  glojp_SHORTEST_LTE: Int
+  lm_EQUAL: String
+  lm_AVERAGE_EQUAL: Float
+  lm_LONGEST_EQUAL: Int
+  lm_SHORTEST_EQUAL: Int
+  lm_GT: Int
+  lm_AVERAGE_GT: Float
+  lm_LONGEST_GT: Int
+  lm_SHORTEST_GT: Int
+  lm_GTE: Int
+  lm_AVERAGE_GTE: Float
+  lm_LONGEST_GTE: Int
+  lm_SHORTEST_GTE: Int
+  lm_LT: Int
+  lm_AVERAGE_LT: Float
+  lm_LONGEST_LT: Int
+  lm_SHORTEST_LT: Int
+  lm_LTE: Int
+  lm_AVERAGE_LTE: Float
+  lm_LONGEST_LTE: Int
+  lm_SHORTEST_LTE: Int
+  lmjp_EQUAL: String
+  lmjp_AVERAGE_EQUAL: Float
+  lmjp_LONGEST_EQUAL: Int
+  lmjp_SHORTEST_EQUAL: Int
+  lmjp_GT: Int
+  lmjp_AVERAGE_GT: Float
+  lmjp_LONGEST_GT: Int
+  lmjp_SHORTEST_GT: Int
+  lmjp_GTE: Int
+  lmjp_AVERAGE_GTE: Float
+  lmjp_LONGEST_GTE: Int
+  lmjp_SHORTEST_GTE: Int
+  lmjp_LT: Int
+  lmjp_AVERAGE_LT: Float
+  lmjp_LONGEST_LT: Int
+  lmjp_SHORTEST_LT: Int
+  lmjp_LTE: Int
+  lmjp_AVERAGE_LTE: Float
+  lmjp_LONGEST_LTE: Int
+  lmjp_SHORTEST_LTE: Int
+  ex_EQUAL: String
+  ex_AVERAGE_EQUAL: Float
+  ex_LONGEST_EQUAL: Int
+  ex_SHORTEST_EQUAL: Int
+  ex_GT: Int
+  ex_AVERAGE_GT: Float
+  ex_LONGEST_GT: Int
+  ex_SHORTEST_GT: Int
+  ex_GTE: Int
+  ex_AVERAGE_GTE: Float
+  ex_LONGEST_GTE: Int
+  ex_SHORTEST_GTE: Int
+  ex_LT: Int
+  ex_AVERAGE_LT: Float
+  ex_LONGEST_LT: Int
+  ex_SHORTEST_LT: Int
+  ex_LTE: Int
+  ex_AVERAGE_LTE: Float
+  ex_LONGEST_LTE: Int
+  ex_SHORTEST_LTE: Int
+  exjp_EQUAL: String
+  exjp_AVERAGE_EQUAL: Float
+  exjp_LONGEST_EQUAL: Int
+  exjp_SHORTEST_EQUAL: Int
+  exjp_GT: Int
+  exjp_AVERAGE_GT: Float
+  exjp_LONGEST_GT: Int
+  exjp_SHORTEST_GT: Int
+  exjp_GTE: Int
+  exjp_AVERAGE_GTE: Float
+  exjp_LONGEST_GTE: Int
+  exjp_SHORTEST_GTE: Int
+  exjp_LT: Int
+  exjp_AVERAGE_LT: Float
+  exjp_LONGEST_LT: Int
+  exjp_SHORTEST_LT: Int
+  exjp_LTE: Int
+  exjp_AVERAGE_LTE: Float
+  exjp_LONGEST_LTE: Int
+  exjp_SHORTEST_LTE: Int
+  pos_EQUAL: String
+  pos_AVERAGE_EQUAL: Float
+  pos_LONGEST_EQUAL: Int
+  pos_SHORTEST_EQUAL: Int
+  pos_GT: Int
+  pos_AVERAGE_GT: Float
+  pos_LONGEST_GT: Int
+  pos_SHORTEST_GT: Int
+  pos_GTE: Int
+  pos_AVERAGE_GTE: Float
+  pos_LONGEST_GTE: Int
+  pos_SHORTEST_GTE: Int
+  pos_LT: Int
+  pos_AVERAGE_LT: Float
+  pos_LONGEST_LT: Int
+  pos_SHORTEST_LT: Int
+  pos_LTE: Int
+  pos_AVERAGE_LTE: Float
+  pos_LONGEST_LTE: Int
+  pos_SHORTEST_LTE: Int
+  princetonLink_EQUAL: String
+  princetonLink_AVERAGE_EQUAL: Float
+  princetonLink_LONGEST_EQUAL: Int
+  princetonLink_SHORTEST_EQUAL: Int
+  princetonLink_GT: Int
+  princetonLink_AVERAGE_GT: Float
+  princetonLink_LONGEST_GT: Int
+  princetonLink_SHORTEST_GT: Int
+  princetonLink_GTE: Int
+  princetonLink_AVERAGE_GTE: Float
+  princetonLink_LONGEST_GTE: Int
+  princetonLink_SHORTEST_GTE: Int
+  princetonLink_LT: Int
+  princetonLink_AVERAGE_LT: Float
+  princetonLink_LONGEST_LT: Int
+  princetonLink_SHORTEST_LT: Int
+  princetonLink_LTE: Int
+  princetonLink_AVERAGE_LTE: Float
+  princetonLink_LONGEST_LTE: Int
+  princetonLink_SHORTEST_LTE: Int
+  gsrc_EQUAL: String
+  gsrc_AVERAGE_EQUAL: Float
+  gsrc_LONGEST_EQUAL: Int
+  gsrc_SHORTEST_EQUAL: Int
+  gsrc_GT: Int
+  gsrc_AVERAGE_GT: Float
+  gsrc_LONGEST_GT: Int
+  gsrc_SHORTEST_GT: Int
+  gsrc_GTE: Int
+  gsrc_AVERAGE_GTE: Float
+  gsrc_LONGEST_GTE: Int
+  gsrc_SHORTEST_GTE: Int
+  gsrc_LT: Int
+  gsrc_AVERAGE_LT: Float
+  gsrc_LONGEST_LT: Int
+  gsrc_SHORTEST_LT: Int
+  gsrc_LTE: Int
+  gsrc_AVERAGE_LTE: Float
+  gsrc_LONGEST_LTE: Int
+  gsrc_SHORTEST_LTE: Int
+  dsrc_EQUAL: String
+  dsrc_AVERAGE_EQUAL: Float
+  dsrc_LONGEST_EQUAL: Int
+  dsrc_SHORTEST_EQUAL: Int
+  dsrc_GT: Int
+  dsrc_AVERAGE_GT: Float
+  dsrc_LONGEST_GT: Int
+  dsrc_SHORTEST_GT: Int
+  dsrc_GTE: Int
+  dsrc_AVERAGE_GTE: Float
+  dsrc_LONGEST_GTE: Int
+  dsrc_SHORTEST_GTE: Int
+  dsrc_LT: Int
+  dsrc_AVERAGE_LT: Float
+  dsrc_LONGEST_LT: Int
+  dsrc_SHORTEST_LT: Int
+  dsrc_LTE: Int
+  dsrc_AVERAGE_LTE: Float
+  dsrc_LONGEST_LTE: Int
+  dsrc_SHORTEST_LTE: Int
+  depth_EQUAL: Int
+  depth_AVERAGE_EQUAL: Float
+  depth_MIN_EQUAL: Int
+  depth_MAX_EQUAL: Int
+  depth_SUM_EQUAL: Int
+  depth_GT: Int
+  depth_AVERAGE_GT: Float
+  depth_MIN_GT: Int
+  depth_MAX_GT: Int
+  depth_SUM_GT: Int
+  depth_GTE: Int
+  depth_AVERAGE_GTE: Float
+  depth_MIN_GTE: Int
+  depth_MAX_GTE: Int
+  depth_SUM_GTE: Int
+  depth_LT: Int
+  depth_AVERAGE_LT: Float
+  depth_MIN_LT: Int
+  depth_MAX_LT: Int
+  depth_SUM_LT: Int
+  depth_LTE: Int
+  depth_AVERAGE_LTE: Float
+  depth_MIN_LTE: Int
+  depth_MAX_LTE: Int
+  depth_SUM_LTE: Int
+  childSize_EQUAL: Int
+  childSize_AVERAGE_EQUAL: Float
+  childSize_MIN_EQUAL: Int
+  childSize_MAX_EQUAL: Int
+  childSize_SUM_EQUAL: Int
+  childSize_GT: Int
+  childSize_AVERAGE_GT: Float
+  childSize_MIN_GT: Int
+  childSize_MAX_GT: Int
+  childSize_SUM_GT: Int
+  childSize_GTE: Int
+  childSize_AVERAGE_GTE: Float
+  childSize_MIN_GTE: Int
+  childSize_MAX_GTE: Int
+  childSize_SUM_GTE: Int
+  childSize_LT: Int
+  childSize_AVERAGE_LT: Float
+  childSize_MIN_LT: Int
+  childSize_MAX_LT: Int
+  childSize_SUM_LT: Int
+  childSize_LTE: Int
+  childSize_AVERAGE_LTE: Float
+  childSize_MIN_LTE: Int
+  childSize_MAX_LTE: Int
+  childSize_SUM_LTE: Int
+  sisonSize_EQUAL: Int
+  sisonSize_AVERAGE_EQUAL: Float
+  sisonSize_MIN_EQUAL: Int
+  sisonSize_MAX_EQUAL: Int
+  sisonSize_SUM_EQUAL: Int
+  sisonSize_GT: Int
+  sisonSize_AVERAGE_GT: Float
+  sisonSize_MIN_GT: Int
+  sisonSize_MAX_GT: Int
+  sisonSize_SUM_GT: Int
+  sisonSize_GTE: Int
+  sisonSize_AVERAGE_GTE: Float
+  sisonSize_MIN_GTE: Int
+  sisonSize_MAX_GTE: Int
+  sisonSize_SUM_GTE: Int
+  sisonSize_LT: Int
+  sisonSize_AVERAGE_LT: Float
+  sisonSize_MIN_LT: Int
+  sisonSize_MAX_LT: Int
+  sisonSize_SUM_LT: Int
+  sisonSize_LTE: Int
+  sisonSize_AVERAGE_LTE: Float
+  sisonSize_MIN_LTE: Int
+  sisonSize_MAX_LTE: Int
+  sisonSize_SUM_LTE: Int
+  syndex_EQUAL: Int
+  syndex_AVERAGE_EQUAL: Float
+  syndex_MIN_EQUAL: Int
+  syndex_MAX_EQUAL: Int
+  syndex_SUM_EQUAL: Int
+  syndex_GT: Int
+  syndex_AVERAGE_GT: Float
+  syndex_MIN_GT: Int
+  syndex_MAX_GT: Int
+  syndex_SUM_GT: Int
+  syndex_GTE: Int
+  syndex_AVERAGE_GTE: Float
+  syndex_MIN_GTE: Int
+  syndex_MAX_GTE: Int
+  syndex_SUM_GTE: Int
+  syndex_LT: Int
+  syndex_AVERAGE_LT: Float
+  syndex_MIN_LT: Int
+  syndex_MAX_LT: Int
+  syndex_SUM_LT: Int
+  syndex_LTE: Int
+  syndex_AVERAGE_LTE: Float
+  syndex_MIN_LTE: Int
+  syndex_MAX_LTE: Int
+  syndex_SUM_LTE: Int
+  updateCount_EQUAL: Int
+  updateCount_AVERAGE_EQUAL: Float
+  updateCount_MIN_EQUAL: Int
+  updateCount_MAX_EQUAL: Int
+  updateCount_SUM_EQUAL: Int
+  updateCount_GT: Int
+  updateCount_AVERAGE_GT: Float
+  updateCount_MIN_GT: Int
+  updateCount_MAX_GT: Int
+  updateCount_SUM_GT: Int
+  updateCount_GTE: Int
+  updateCount_AVERAGE_GTE: Float
+  updateCount_MIN_GTE: Int
+  updateCount_MAX_GTE: Int
+  updateCount_SUM_GTE: Int
+  updateCount_LT: Int
+  updateCount_AVERAGE_LT: Float
+  updateCount_MIN_LT: Int
+  updateCount_MAX_LT: Int
+  updateCount_SUM_LT: Int
+  updateCount_LTE: Int
+  updateCount_AVERAGE_LTE: Float
+  updateCount_MIN_LTE: Int
+  updateCount_MAX_LTE: Int
+  updateCount_SUM_LTE: Int
+  createdAt_EQUAL: AWSDateTime
+  createdAt_MIN_EQUAL: AWSDateTime
+  createdAt_MAX_EQUAL: AWSDateTime
+  createdAt_GT: AWSDateTime
+  createdAt_MIN_GT: AWSDateTime
+  createdAt_MAX_GT: AWSDateTime
+  createdAt_GTE: AWSDateTime
+  createdAt_MIN_GTE: AWSDateTime
+  createdAt_MAX_GTE: AWSDateTime
+  createdAt_LT: AWSDateTime
+  createdAt_MIN_LT: AWSDateTime
+  createdAt_MAX_LT: AWSDateTime
+  createdAt_LTE: AWSDateTime
+  createdAt_MIN_LTE: AWSDateTime
+  createdAt_MAX_LTE: AWSDateTime
+  lastModified_EQUAL: AWSDateTime
+  lastModified_MIN_EQUAL: AWSDateTime
+  lastModified_MAX_EQUAL: AWSDateTime
+  lastModified_GT: AWSDateTime
+  lastModified_MIN_GT: AWSDateTime
+  lastModified_MAX_GT: AWSDateTime
+  lastModified_GTE: AWSDateTime
+  lastModified_MIN_GTE: AWSDateTime
+  lastModified_MAX_GTE: AWSDateTime
+  lastModified_LT: AWSDateTime
+  lastModified_MIN_LT: AWSDateTime
+  lastModified_MAX_LT: AWSDateTime
+  lastModified_LTE: AWSDateTime
+  lastModified_MIN_LTE: AWSDateTime
+  lastModified_MAX_LTE: AWSDateTime
+}
+
+input PushLmsUpdateConnectionInput {
+  node: wnUpdateInput
+}
+
+input PushLmsUpdateFieldInput {
+  where: PushLmsConnectionWhere
+  update: PushLmsUpdateConnectionInput
+  connect: [PushLmsConnectFieldInput!]
+  disconnect: [PushLmsDisconnectFieldInput!]
+  create: [PushLmsCreateFieldInput!]
+  delete: [PushLmsDeleteFieldInput!]
+}
+
+input PushOnCreateInput {
+  push: String!
+  lang: String!
+}
+
+input PushOptions {
+# """
+  # Specify one or more PushSort objects to sort Pushes by. The sorts will be applied in the order in which they are arranged in the array.
+# """
+  sort: [PushSort!]
+  limit: Int
+  offset: Int
+}
+
+input PushPusherAggregateInput {
+  count: Int
+  count_LT: Int
+  count_LTE: Int
+  count_GT: Int
+  count_GTE: Int
+  AND: [PushPusherAggregateInput!]
+  OR: [PushPusherAggregateInput!]
+  node: PushPusherNodeAggregationWhereInput
+}
+
+input PushPusherConnectFieldInput {
+  where: UserConnectWhere
+  connect: UserConnectInput
+}
+
+input PushPusherConnectionSort {
+  node: UserSort
+}
+
+input PushPusherConnectionWhere {
+  AND: [PushPusherConnectionWhere!]
+  OR: [PushPusherConnectionWhere!]
+  node: UserWhere
+  node_NOT: UserWhere
+}
+
+input PushPusherConnectOrCreateFieldInput {
+  where: UserConnectOrCreateWhere!
+  onCreate: PushPusherConnectOrCreateFieldInputOnCreate!
+}
+
+input PushPusherConnectOrCreateFieldInputOnCreate {
+  node: UserOnCreateInput!
+}
+
+input PushPusherCreateFieldInput {
+  node: UserCreateInput!
+}
+
+input PushPusherDeleteFieldInput {
+  where: PushPusherConnectionWhere
+  delete: UserDeleteInput
+}
+
+input PushPusherDisconnectFieldInput {
+  where: PushPusherConnectionWhere
+  disconnect: UserDisconnectInput
+}
+
+input PushPusherFieldInput {
+  create: PushPusherCreateFieldInput
+  connect: PushPusherConnectFieldInput
+  connectOrCreate: PushPusherConnectOrCreateFieldInput
+}
+
+input PushPusherNodeAggregationWhereInput {
+  AND: [PushPusherNodeAggregationWhereInput!]
+  OR: [PushPusherNodeAggregationWhereInput!]
+  id_EQUAL: ID
+  name_EQUAL: String
+  name_AVERAGE_EQUAL: Float
+  name_LONGEST_EQUAL: Int
+  name_SHORTEST_EQUAL: Int
+  name_GT: Int
+  name_AVERAGE_GT: Float
+  name_LONGEST_GT: Int
+  name_SHORTEST_GT: Int
+  name_GTE: Int
+  name_AVERAGE_GTE: Float
+  name_LONGEST_GTE: Int
+  name_SHORTEST_GTE: Int
+  name_LT: Int
+  name_AVERAGE_LT: Float
+  name_LONGEST_LT: Int
+  name_SHORTEST_LT: Int
+  name_LTE: Int
+  name_AVERAGE_LTE: Float
+  name_LONGEST_LTE: Int
+  name_SHORTEST_LTE: Int
+}
+
+input PushPusherUpdateConnectionInput {
+  node: UserUpdateInput
+}
+
+input PushPusherUpdateFieldInput {
+  where: PushPusherConnectionWhere
+  update: PushPusherUpdateConnectionInput
+  connect: PushPusherConnectFieldInput
+  disconnect: PushPusherDisconnectFieldInput
+  create: PushPusherCreateFieldInput
+  delete: PushPusherDeleteFieldInput
+  connectOrCreate: PushPusherConnectOrCreateFieldInput
+}
+
+input PushRelationInput {
+  pusher: PushPusherCreateFieldInput
+  lms: [PushLmsCreateFieldInput!]
+  lmsjp: [PushLmsjpCreateFieldInput!]
+}
+
+# """
+# Fields to sort Pushes by. The order in which sorts are applied is not guaranteed when specifying many fields in one PushSort object.
+# """
+input PushSort {
+  push: SortDirection
+  lang: SortDirection
+  id: SortDirection
+}
+
+input PushUniqueWhere {
+  id: ID
+}
+
+input PushUpdateInput {
+  push: String
+  lang: String
+  pusher: PushPusherUpdateFieldInput
+  lms: [PushLmsUpdateFieldInput!]
+  lmsjp: [PushLmsjpUpdateFieldInput!]
+}
+
+input PushWhere {
+  OR: [PushWhere!]
+  AND: [PushWhere!]
+  push: String
+  push_NOT: String
+  push_IN: [String!]
+  push_NOT_IN: [String!]
+  push_CONTAINS: String
+  push_NOT_CONTAINS: String
+  push_STARTS_WITH: String
+  push_NOT_STARTS_WITH: String
+  push_ENDS_WITH: String
+  push_NOT_ENDS_WITH: String
+  lang: String
+  lang_NOT: String
+  lang_IN: [String!]
+  lang_NOT_IN: [String!]
+  lang_CONTAINS: String
+  lang_NOT_CONTAINS: String
+  lang_STARTS_WITH: String
+  lang_NOT_STARTS_WITH: String
+  lang_ENDS_WITH: String
+  lang_NOT_ENDS_WITH: String
+  id: ID
+  id_NOT: ID
+  id_IN: [ID!]
+  id_NOT_IN: [ID!]
+  id_CONTAINS: ID
+  id_NOT_CONTAINS: ID
+  id_STARTS_WITH: ID
+  id_NOT_STARTS_WITH: ID
+  id_ENDS_WITH: ID
+  id_NOT_ENDS_WITH: ID
+  pusher: UserWhere
+  pusher_NOT: UserWhere
+  pusherAggregate: PushPusherAggregateInput
+  lms: wnWhere @deprecated(reason: "Use `lms_SOME` instead.")
+  lms_NOT: wnWhere @deprecated(reason: "Use `lms_NONE` instead.")
+  lmsAggregate: PushLmsAggregateInput
+
+# """Return Pushes where all of the related wns match this filter"""
+  lms_ALL: wnWhere
+
+# """Return Pushes where none of the related wns match this filter"""
+  lms_NONE: wnWhere
+
+# """Return Pushes where one of the related wns match this filter"""
+  lms_SINGLE: wnWhere
+
+# """Return Pushes where some of the related wns match this filter"""
+  lms_SOME: wnWhere
+  lmsjp: wnWhere @deprecated(reason: "Use `lmsjp_SOME` instead.")
+  lmsjp_NOT: wnWhere @deprecated(reason: "Use `lmsjp_NONE` instead.")
+  lmsjpAggregate: PushLmsjpAggregateInput
+
+# """Return Pushes where all of the related wns match this filter"""
+  lmsjp_ALL: wnWhere
+
+# """Return Pushes where none of the related wns match this filter"""
+  lmsjp_NONE: wnWhere
+
+# """Return Pushes where one of the related wns match this filter"""
+  lmsjp_SINGLE: wnWhere
+
+# """Return Pushes where some of the related wns match this filter"""
+  lmsjp_SOME: wnWhere
+  pusherConnection: PushPusherConnectionWhere
+  pusherConnection_NOT: PushPusherConnectionWhere
+  lmsConnection: PushLmsConnectionWhere @deprecated(reason: "Use `lmsConnection_SOME` instead.")
+  lmsConnection_NOT: PushLmsConnectionWhere @deprecated(reason: "Use `lmsConnection_NONE` instead.")
+  lmsConnection_ALL: PushLmsConnectionWhere
+  lmsConnection_NONE: PushLmsConnectionWhere
+  lmsConnection_SINGLE: PushLmsConnectionWhere
+  lmsConnection_SOME: PushLmsConnectionWhere
+  lmsjpConnection: PushLmsjpConnectionWhere @deprecated(reason: "Use `lmsjpConnection_SOME` instead.")
+  lmsjpConnection_NOT: PushLmsjpConnectionWhere @deprecated(reason: "Use `lmsjpConnection_NONE` instead.")
+  lmsjpConnection_ALL: PushLmsjpConnectionWhere
+  lmsjpConnection_NONE: PushLmsjpConnectionWhere
+  lmsjpConnection_SINGLE: PushLmsjpConnectionWhere
+  lmsjpConnection_SOME: PushLmsjpConnectionWhere
+}
+
+input RelCreateInput {
+  k: [String!]
+}
+
+input RelSort {
+  k: SortDirection
+}
+
+input RelUpdateInput {
+  k: [String!]
+  k_POP: Int
+  k_PUSH: [String!]
+}
+
+input RelWhere {
+  OR: [RelWhere!]
+  AND: [RelWhere!]
+  k: [String!]
+  k_NOT: [String!]
+  k_INCLUDES: String
+  k_NOT_INCLUDES: String
+}
+
+input tameshiConnectInput {
+  from: [tameshiFromConnectFieldInput!]
+}
+
+input tameshiConnectWhere {
+  node: tameshiWhere!
+}
+
+input tameshiCreateInput {
+  spell: String!
+  lists: [String!]!
+  from: tameshiFromFieldInput
+}
+
+input tameshiDeleteInput {
+  from: [tameshiFromDeleteFieldInput!]
+}
+
+input tameshiDisconnectInput {
+  from: [tameshiFromDisconnectFieldInput!]
+}
+
+input tameshiFromAggregateInput {
+  count: Int
+  count_LT: Int
+  count_LTE: Int
+  count_GT: Int
+  count_GTE: Int
+  AND: [tameshiFromAggregateInput!]
+  OR: [tameshiFromAggregateInput!]
+  node: tameshiFromNodeAggregationWhereInput
+}
+
+input tameshiFromConnectFieldInput {
+  where: tameshiConnectWhere
+  connect: [tameshiConnectInput!]
+}
+
+input tameshiFromConnectionSort {
+  node: tameshiSort
+}
+
+input tameshiFromConnectionWhere {
+  AND: [tameshiFromConnectionWhere!]
+  OR: [tameshiFromConnectionWhere!]
+  node: tameshiWhere
+  node_NOT: tameshiWhere
+}
+
+input tameshiFromCreateFieldInput {
+  node: tameshiCreateInput!
+}
+
+input tameshiFromDeleteFieldInput {
+  where: tameshiFromConnectionWhere
+  delete: tameshiDeleteInput
+}
+
+input tameshiFromDisconnectFieldInput {
+  where: tameshiFromConnectionWhere
+  disconnect: tameshiDisconnectInput
+}
+
+input tameshiFromFieldInput {
+  create: [tameshiFromCreateFieldInput!]
+  connect: [tameshiFromConnectFieldInput!]
+}
+
+input tameshiFromNodeAggregationWhereInput {
+  AND: [tameshiFromNodeAggregationWhereInput!]
+  OR: [tameshiFromNodeAggregationWhereInput!]
+  spell_EQUAL: String
+  spell_AVERAGE_EQUAL: Float
+  spell_LONGEST_EQUAL: Int
+  spell_SHORTEST_EQUAL: Int
+  spell_GT: Int
+  spell_AVERAGE_GT: Float
+  spell_LONGEST_GT: Int
+  spell_SHORTEST_GT: Int
+  spell_GTE: Int
+  spell_AVERAGE_GTE: Float
+  spell_LONGEST_GTE: Int
+  spell_SHORTEST_GTE: Int
+  spell_LT: Int
+  spell_AVERAGE_LT: Float
+  spell_LONGEST_LT: Int
+  spell_SHORTEST_LT: Int
+  spell_LTE: Int
+  spell_AVERAGE_LTE: Float
+  spell_LONGEST_LTE: Int
+  spell_SHORTEST_LTE: Int
+}
+
+input tameshiFromUpdateConnectionInput {
+  node: tameshiUpdateInput
+}
+
+input tameshiFromUpdateFieldInput {
+  where: tameshiFromConnectionWhere
+  update: tameshiFromUpdateConnectionInput
+  connect: [tameshiFromConnectFieldInput!]
+  disconnect: [tameshiFromDisconnectFieldInput!]
+  create: [tameshiFromCreateFieldInput!]
+  delete: [tameshiFromDeleteFieldInput!]
+}
+
+input tameshiOptions {
+# """
+# Specify one or more tameshiSort objects to sort Tameshis by. The sorts will be applied in the order in which they are arranged in the array.
+# """
+  sort: [tameshiSort!]
+  limit: Int
+  offset: Int
+}
+
+input tameshiRelationInput {
+  from: [tameshiFromCreateFieldInput!]
+}
+
+# """
+# Fields to sort Tameshis by. The order in which sorts are applied is not guaranteed when specifying many fields in one tameshiSort object.
+# """
+input tameshiSort {
+  spell: SortDirection
+}
+
+input tameshiUpdateInput {
+  spell: String
+  lists: [String!]
+  lists_POP: Int
+  lists_PUSH: [String!]
+  from: [tameshiFromUpdateFieldInput!]
+}
+
+input tameshiWhere {
+  OR: [tameshiWhere!]
+  AND: [tameshiWhere!]
+  spell: String
+  spell_NOT: String
+  spell_IN: [String!]
+  spell_NOT_IN: [String!]
+  spell_CONTAINS: String
+  spell_NOT_CONTAINS: String
+  spell_STARTS_WITH: String
+  spell_NOT_STARTS_WITH: String
+  spell_ENDS_WITH: String
+  spell_NOT_ENDS_WITH: String
+  lists: [String!]
+  lists_NOT: [String!]
+  lists_INCLUDES: String
+  lists_NOT_INCLUDES: String
+  from: tameshiWhere @deprecated(reason: "Use `from_SOME` instead.")
+  from_NOT: tameshiWhere @deprecated(reason: "Use `from_NONE` instead.")
+  fromAggregate: tameshiFromAggregateInput
+
+# """Return tameshis where all of the related tameshis match this filter"""
+  from_ALL: tameshiWhere
+
+# """Return tameshis where none of the related tameshis match this filter"""
+  from_NONE: tameshiWhere
+
+# """Return tameshis where one of the related tameshis match this filter"""
+  from_SINGLE: tameshiWhere
+
+# """Return tameshis where some of the related tameshis match this filter"""
+  from_SOME: tameshiWhere
+  fromConnection: tameshiFromConnectionWhere @deprecated(reason: "Use `fromConnection_SOME` instead.")
+  fromConnection_NOT: tameshiFromConnectionWhere @deprecated(reason: "Use `fromConnection_NONE` instead.")
+  fromConnection_ALL: tameshiFromConnectionWhere
+  fromConnection_NONE: tameshiFromConnectionWhere
+  fromConnection_SINGLE: tameshiFromConnectionWhere
+  fromConnection_SOME: tameshiFromConnectionWhere
+}
+
+input UserConnectInput {
+  push: [UserPushConnectFieldInput!]
+}
+
+input UserConnectOrCreateInput {
+  push: [UserPushConnectOrCreateFieldInput!]
+}
+
+input UserConnectOrCreateWhere {
+  node: UserUniqueWhere!
+}
+
+input UserConnectWhere {
+  node: UserWhere!
+}
+
+input UserCreateInput {
+  name: String!
+  push: UserPushFieldInput
+}
+
+input UserDeleteInput {
+  push: [UserPushDeleteFieldInput!]
+}
+
+input UserDisconnectInput {
+  push: [UserPushDisconnectFieldInput!]
+}
+
+input UserOnCreateInput {
+  name: String!
+}
+
+input UserOptions {
+  # """
+  # Specify one or more UserSort objects to sort Users by. The sorts will be applied in the order in which they are arranged in the array.
+  # """
+  sort: [UserSort!]
+  limit: Int
+  offset: Int
+}
+
+input UserPushAggregateInput {
+  count: Int
+  count_LT: Int
+  count_LTE: Int
+  count_GT: Int
+  count_GTE: Int
+  AND: [UserPushAggregateInput!]
+  OR: [UserPushAggregateInput!]
+  node: UserPushNodeAggregationWhereInput
+}
+
+input UserPushConnectFieldInput {
+  where: PushConnectWhere
+  connect: [PushConnectInput!]
+}
+
+input UserPushConnectionSort {
+  node: PushSort
+}
+
+input UserPushConnectionWhere {
+  AND: [UserPushConnectionWhere!]
+  OR: [UserPushConnectionWhere!]
+  node: PushWhere
+  node_NOT: PushWhere
+}
+
+input UserPushConnectOrCreateFieldInput {
+  where: PushConnectOrCreateWhere!
+  onCreate: UserPushConnectOrCreateFieldInputOnCreate!
+}
+
+input UserPushConnectOrCreateFieldInputOnCreate {
+  node: PushOnCreateInput!
+}
+
+input UserPushCreateFieldInput {
+  node: PushCreateInput!
+}
+
+input UserPushDeleteFieldInput {
+  where: UserPushConnectionWhere
+  delete: PushDeleteInput
+}
+
+input UserPushDisconnectFieldInput {
+  where: UserPushConnectionWhere
+  disconnect: PushDisconnectInput
+}
+
+input UserPushFieldInput {
+  create: [UserPushCreateFieldInput!]
+  connect: [UserPushConnectFieldInput!]
+  connectOrCreate: [UserPushConnectOrCreateFieldInput!]
+}
+
+input UserPushNodeAggregationWhereInput {
+  AND: [UserPushNodeAggregationWhereInput!]
+  OR: [UserPushNodeAggregationWhereInput!]
+  id_EQUAL: ID
+  push_EQUAL: String
+  push_AVERAGE_EQUAL: Float
+  push_LONGEST_EQUAL: Int
+  push_SHORTEST_EQUAL: Int
+  push_GT: Int
+  push_AVERAGE_GT: Float
+  push_LONGEST_GT: Int
+  push_SHORTEST_GT: Int
+  push_GTE: Int
+  push_AVERAGE_GTE: Float
+  push_LONGEST_GTE: Int
+  push_SHORTEST_GTE: Int
+  push_LT: Int
+  push_AVERAGE_LT: Float
+  push_LONGEST_LT: Int
+  push_SHORTEST_LT: Int
+  push_LTE: Int
+  push_AVERAGE_LTE: Float
+  push_LONGEST_LTE: Int
+  push_SHORTEST_LTE: Int
+  lang_EQUAL: String
+  lang_AVERAGE_EQUAL: Float
+  lang_LONGEST_EQUAL: Int
+  lang_SHORTEST_EQUAL: Int
+  lang_GT: Int
+  lang_AVERAGE_GT: Float
+  lang_LONGEST_GT: Int
+  lang_SHORTEST_GT: Int
+  lang_GTE: Int
+  lang_AVERAGE_GTE: Float
+  lang_LONGEST_GTE: Int
+  lang_SHORTEST_GTE: Int
+  lang_LT: Int
+  lang_AVERAGE_LT: Float
+  lang_LONGEST_LT: Int
+  lang_SHORTEST_LT: Int
+  lang_LTE: Int
+  lang_AVERAGE_LTE: Float
+  lang_LONGEST_LTE: Int
+  lang_SHORTEST_LTE: Int
+}
+
+input UserPushUpdateConnectionInput {
+  node: PushUpdateInput
+}
+
+input UserPushUpdateFieldInput {
+  where: UserPushConnectionWhere
+  update: UserPushUpdateConnectionInput
+  connect: [UserPushConnectFieldInput!]
+  disconnect: [UserPushDisconnectFieldInput!]
+  create: [UserPushCreateFieldInput!]
+  delete: [UserPushDeleteFieldInput!]
+  connectOrCreate: [UserPushConnectOrCreateFieldInput!]
+}
+
+input UserRelationInput {
+  push: [UserPushCreateFieldInput!]
+}
+
+# """
+# Fields to sort Users by. The order in which sorts are applied is not guaranteed when specifying many fields in one UserSort object.
+# """
+input UserSort {
+  name: SortDirection
+  id: SortDirection
+}
+
+input UserUniqueWhere {
+  id: ID
+}
+
+input UserUpdateInput {
+  name: String
+  push: [UserPushUpdateFieldInput!]
+}
+
+input UserWhere {
+  OR: [UserWhere!]
+  AND: [UserWhere!]
+  name: String
+  name_NOT: String
+  name_IN: [String!]
+  name_NOT_IN: [String!]
+  name_CONTAINS: String
+  name_NOT_CONTAINS: String
+  name_STARTS_WITH: String
+  name_NOT_STARTS_WITH: String
+  name_ENDS_WITH: String
+  name_NOT_ENDS_WITH: String
+  id: ID
+  id_NOT: ID
+  id_IN: [ID!]
+  id_NOT_IN: [ID!]
+  id_CONTAINS: ID
+  id_NOT_CONTAINS: ID
+  id_STARTS_WITH: ID
+  id_NOT_STARTS_WITH: ID
+  id_ENDS_WITH: ID
+  id_NOT_ENDS_WITH: ID
+  push: PushWhere @deprecated(reason: "Use `push_SOME` instead.")
+  push_NOT: PushWhere @deprecated(reason: "Use `push_NONE` instead.")
+  pushAggregate: UserPushAggregateInput
+
+# """Return Users where all of the related Pushes match this filter"""
+  push_ALL: PushWhere
+
+# """Return Users where none of the related Pushes match this filter"""
+  push_NONE: PushWhere
+
+# """Return Users where one of the related Pushes match this filter"""
+  push_SINGLE: PushWhere
+
+# """Return Users where some of the related Pushes match this filter"""
+  push_SOME: PushWhere
+  pushConnection: UserPushConnectionWhere @deprecated(reason: "Use `pushConnection_SOME` instead.")
+  pushConnection_NOT: UserPushConnectionWhere @deprecated(reason: "Use `pushConnection_NONE` instead.")
+  pushConnection_ALL: UserPushConnectionWhere
+  pushConnection_NONE: UserPushConnectionWhere
+  pushConnection_SINGLE: UserPushConnectionWhere
+  pushConnection_SOME: UserPushConnectionWhere
+}
+
+input wnConnectInput {
+  lmspush: [wnLmspushConnectFieldInput!]
+  lmsjppush: [wnLmsjppushConnectFieldInput!]
+  jwlk: [wnJwlkConnectFieldInput!]
+  jwlj: [wnJwljConnectFieldInput!]
+}
+
+input wnConnectOrCreateInput {
+  lmspush: [wnLmspushConnectOrCreateFieldInput!]
+  lmsjppush: [wnLmsjppushConnectOrCreateFieldInput!]
+}
+
+input wnConnectWhere {
+  node: wnWhere!
+}
+
+input wnCreateInput {
+  id: String
+  spell: String!
+  seps: [String!]!
+  sep: String!
+  name: String!
+  glo: String!
+  glojp: String!
+  lm: String
+  lmjp: String
+  lms: [String]
+  lmsjp: [String]
+  ex: String
+  exjp: String
+  exs: [String]
+  exsjp: [String]
+  pos: String
+  depth: Int!
+  childSize: Int!
+  sisonSize: Int!
+  syndex: Int
+  princetonLink: String
+  gsrc: String
+  dsrc: String
+  lmspush: wnLmspushFieldInput
+  lmsjppush: wnLmsjppushFieldInput
+  jwlk: wnJwlkFieldInput
+  jwlj: wnJwljFieldInput
+}
+
+input wnDeleteInput {
+  lmspush: [wnLmspushDeleteFieldInput!]
+  lmsjppush: [wnLmsjppushDeleteFieldInput!]
+  jwlk: [wnJwlkDeleteFieldInput!]
+  jwlj: [wnJwljDeleteFieldInput!]
+}
+
+input wnDisconnectInput {
+  lmspush: [wnLmspushDisconnectFieldInput!]
+  lmsjppush: [wnLmsjppushDisconnectFieldInput!]
+  jwlk: [wnJwlkDisconnectFieldInput!]
+  jwlj: [wnJwljDisconnectFieldInput!]
+}
+
+input wnJwljAggregateInput {
+  count: Int
+  count_LT: Int
+  count_LTE: Int
+  count_GT: Int
+  count_GTE: Int
+  AND: [wnJwljAggregateInput!]
+  OR: [wnJwljAggregateInput!]
+  node: wnJwljNodeAggregationWhereInput
+}
+
+input wnJwljConnectFieldInput {
+  where: wnConnectWhere
+  connect: [wnConnectInput!]
+  edge: RelCreateInput
+}
+
+input wnJwljConnectionSort {
+  edge: RelSort
+  node: wnSort
+}
+
+input wnJwljConnectionWhere {
+  AND: [wnJwljConnectionWhere!]
+  OR: [wnJwljConnectionWhere!]
+  edge: RelWhere
+  edge_NOT: RelWhere
+  node: wnWhere
+  node_NOT: wnWhere
+}
+
+input wnJwljCreateFieldInput {
+  node: wnCreateInput!
+  edge: RelCreateInput
+}
+
+input wnJwljDeleteFieldInput {
+  where: wnJwljConnectionWhere
+  delete: wnDeleteInput
+}
+
+input wnJwljDisconnectFieldInput {
+  where: wnJwljConnectionWhere
+  disconnect: wnDisconnectInput
+}
+
+input wnJwljFieldInput {
+  create: [wnJwljCreateFieldInput!]
+  connect: [wnJwljConnectFieldInput!]
+}
+
+input wnJwljNodeAggregationWhereInput {
+  AND: [wnJwljNodeAggregationWhereInput!]
+  OR: [wnJwljNodeAggregationWhereInput!]
+  id_EQUAL: String
+  id_AVERAGE_EQUAL: Float
+  id_LONGEST_EQUAL: Int
+  id_SHORTEST_EQUAL: Int
+  id_GT: Int
+  id_AVERAGE_GT: Float
+  id_LONGEST_GT: Int
+  id_SHORTEST_GT: Int
+  id_GTE: Int
+  id_AVERAGE_GTE: Float
+  id_LONGEST_GTE: Int
+  id_SHORTEST_GTE: Int
+  id_LT: Int
+  id_AVERAGE_LT: Float
+  id_LONGEST_LT: Int
+  id_SHORTEST_LT: Int
+  id_LTE: Int
+  id_AVERAGE_LTE: Float
+  id_LONGEST_LTE: Int
+  id_SHORTEST_LTE: Int
+  spell_EQUAL: String
+  spell_AVERAGE_EQUAL: Float
+  spell_LONGEST_EQUAL: Int
+  spell_SHORTEST_EQUAL: Int
+  spell_GT: Int
+  spell_AVERAGE_GT: Float
+  spell_LONGEST_GT: Int
+  spell_SHORTEST_GT: Int
+  spell_GTE: Int
+  spell_AVERAGE_GTE: Float
+  spell_LONGEST_GTE: Int
+  spell_SHORTEST_GTE: Int
+  spell_LT: Int
+  spell_AVERAGE_LT: Float
+  spell_LONGEST_LT: Int
+  spell_SHORTEST_LT: Int
+  spell_LTE: Int
+  spell_AVERAGE_LTE: Float
+  spell_LONGEST_LTE: Int
+  spell_SHORTEST_LTE: Int
+  sep_EQUAL: String
+  sep_AVERAGE_EQUAL: Float
+  sep_LONGEST_EQUAL: Int
+  sep_SHORTEST_EQUAL: Int
+  sep_GT: Int
+  sep_AVERAGE_GT: Float
+  sep_LONGEST_GT: Int
+  sep_SHORTEST_GT: Int
+  sep_GTE: Int
+  sep_AVERAGE_GTE: Float
+  sep_LONGEST_GTE: Int
+  sep_SHORTEST_GTE: Int
+  sep_LT: Int
+  sep_AVERAGE_LT: Float
+  sep_LONGEST_LT: Int
+  sep_SHORTEST_LT: Int
+  sep_LTE: Int
+  sep_AVERAGE_LTE: Float
+  sep_LONGEST_LTE: Int
+  sep_SHORTEST_LTE: Int
+  name_EQUAL: String
+  name_AVERAGE_EQUAL: Float
+  name_LONGEST_EQUAL: Int
+  name_SHORTEST_EQUAL: Int
+  name_GT: Int
+  name_AVERAGE_GT: Float
+  name_LONGEST_GT: Int
+  name_SHORTEST_GT: Int
+  name_GTE: Int
+  name_AVERAGE_GTE: Float
+  name_LONGEST_GTE: Int
+  name_SHORTEST_GTE: Int
+  name_LT: Int
+  name_AVERAGE_LT: Float
+  name_LONGEST_LT: Int
+  name_SHORTEST_LT: Int
+  name_LTE: Int
+  name_AVERAGE_LTE: Float
+  name_LONGEST_LTE: Int
+  name_SHORTEST_LTE: Int
+  glo_EQUAL: String
+  glo_AVERAGE_EQUAL: Float
+  glo_LONGEST_EQUAL: Int
+  glo_SHORTEST_EQUAL: Int
+  glo_GT: Int
+  glo_AVERAGE_GT: Float
+  glo_LONGEST_GT: Int
+  glo_SHORTEST_GT: Int
+  glo_GTE: Int
+  glo_AVERAGE_GTE: Float
+  glo_LONGEST_GTE: Int
+  glo_SHORTEST_GTE: Int
+  glo_LT: Int
+  glo_AVERAGE_LT: Float
+  glo_LONGEST_LT: Int
+  glo_SHORTEST_LT: Int
+  glo_LTE: Int
+  glo_AVERAGE_LTE: Float
+  glo_LONGEST_LTE: Int
+  glo_SHORTEST_LTE: Int
+  glojp_EQUAL: String
+  glojp_AVERAGE_EQUAL: Float
+  glojp_LONGEST_EQUAL: Int
+  glojp_SHORTEST_EQUAL: Int
+  glojp_GT: Int
+  glojp_AVERAGE_GT: Float
+  glojp_LONGEST_GT: Int
+  glojp_SHORTEST_GT: Int
+  glojp_GTE: Int
+  glojp_AVERAGE_GTE: Float
+  glojp_LONGEST_GTE: Int
+  glojp_SHORTEST_GTE: Int
+  glojp_LT: Int
+  glojp_AVERAGE_LT: Float
+  glojp_LONGEST_LT: Int
+  glojp_SHORTEST_LT: Int
+  glojp_LTE: Int
+  glojp_AVERAGE_LTE: Float
+  glojp_LONGEST_LTE: Int
+  glojp_SHORTEST_LTE: Int
+  lm_EQUAL: String
+  lm_AVERAGE_EQUAL: Float
+  lm_LONGEST_EQUAL: Int
+  lm_SHORTEST_EQUAL: Int
+  lm_GT: Int
+  lm_AVERAGE_GT: Float
+  lm_LONGEST_GT: Int
+  lm_SHORTEST_GT: Int
+  lm_GTE: Int
+  lm_AVERAGE_GTE: Float
+  lm_LONGEST_GTE: Int
+  lm_SHORTEST_GTE: Int
+  lm_LT: Int
+  lm_AVERAGE_LT: Float
+  lm_LONGEST_LT: Int
+  lm_SHORTEST_LT: Int
+  lm_LTE: Int
+  lm_AVERAGE_LTE: Float
+  lm_LONGEST_LTE: Int
+  lm_SHORTEST_LTE: Int
+  lmjp_EQUAL: String
+  lmjp_AVERAGE_EQUAL: Float
+  lmjp_LONGEST_EQUAL: Int
+  lmjp_SHORTEST_EQUAL: Int
+  lmjp_GT: Int
+  lmjp_AVERAGE_GT: Float
+  lmjp_LONGEST_GT: Int
+  lmjp_SHORTEST_GT: Int
+  lmjp_GTE: Int
+  lmjp_AVERAGE_GTE: Float
+  lmjp_LONGEST_GTE: Int
+  lmjp_SHORTEST_GTE: Int
+  lmjp_LT: Int
+  lmjp_AVERAGE_LT: Float
+  lmjp_LONGEST_LT: Int
+  lmjp_SHORTEST_LT: Int
+  lmjp_LTE: Int
+  lmjp_AVERAGE_LTE: Float
+  lmjp_LONGEST_LTE: Int
+  lmjp_SHORTEST_LTE: Int
+  ex_EQUAL: String
+  ex_AVERAGE_EQUAL: Float
+  ex_LONGEST_EQUAL: Int
+  ex_SHORTEST_EQUAL: Int
+  ex_GT: Int
+  ex_AVERAGE_GT: Float
+  ex_LONGEST_GT: Int
+  ex_SHORTEST_GT: Int
+  ex_GTE: Int
+  ex_AVERAGE_GTE: Float
+  ex_LONGEST_GTE: Int
+  ex_SHORTEST_GTE: Int
+  ex_LT: Int
+  ex_AVERAGE_LT: Float
+  ex_LONGEST_LT: Int
+  ex_SHORTEST_LT: Int
+  ex_LTE: Int
+  ex_AVERAGE_LTE: Float
+  ex_LONGEST_LTE: Int
+  ex_SHORTEST_LTE: Int
+  exjp_EQUAL: String
+  exjp_AVERAGE_EQUAL: Float
+  exjp_LONGEST_EQUAL: Int
+  exjp_SHORTEST_EQUAL: Int
+  exjp_GT: Int
+  exjp_AVERAGE_GT: Float
+  exjp_LONGEST_GT: Int
+  exjp_SHORTEST_GT: Int
+  exjp_GTE: Int
+  exjp_AVERAGE_GTE: Float
+  exjp_LONGEST_GTE: Int
+  exjp_SHORTEST_GTE: Int
+  exjp_LT: Int
+  exjp_AVERAGE_LT: Float
+  exjp_LONGEST_LT: Int
+  exjp_SHORTEST_LT: Int
+  exjp_LTE: Int
+  exjp_AVERAGE_LTE: Float
+  exjp_LONGEST_LTE: Int
+  exjp_SHORTEST_LTE: Int
+  pos_EQUAL: String
+  pos_AVERAGE_EQUAL: Float
+  pos_LONGEST_EQUAL: Int
+  pos_SHORTEST_EQUAL: Int
+  pos_GT: Int
+  pos_AVERAGE_GT: Float
+  pos_LONGEST_GT: Int
+  pos_SHORTEST_GT: Int
+  pos_GTE: Int
+  pos_AVERAGE_GTE: Float
+  pos_LONGEST_GTE: Int
+  pos_SHORTEST_GTE: Int
+  pos_LT: Int
+  pos_AVERAGE_LT: Float
+  pos_LONGEST_LT: Int
+  pos_SHORTEST_LT: Int
+  pos_LTE: Int
+  pos_AVERAGE_LTE: Float
+  pos_LONGEST_LTE: Int
+  pos_SHORTEST_LTE: Int
+  princetonLink_EQUAL: String
+  princetonLink_AVERAGE_EQUAL: Float
+  princetonLink_LONGEST_EQUAL: Int
+  princetonLink_SHORTEST_EQUAL: Int
+  princetonLink_GT: Int
+  princetonLink_AVERAGE_GT: Float
+  princetonLink_LONGEST_GT: Int
+  princetonLink_SHORTEST_GT: Int
+  princetonLink_GTE: Int
+  princetonLink_AVERAGE_GTE: Float
+  princetonLink_LONGEST_GTE: Int
+  princetonLink_SHORTEST_GTE: Int
+  princetonLink_LT: Int
+  princetonLink_AVERAGE_LT: Float
+  princetonLink_LONGEST_LT: Int
+  princetonLink_SHORTEST_LT: Int
+  princetonLink_LTE: Int
+  princetonLink_AVERAGE_LTE: Float
+  princetonLink_LONGEST_LTE: Int
+  princetonLink_SHORTEST_LTE: Int
+  gsrc_EQUAL: String
+  gsrc_AVERAGE_EQUAL: Float
+  gsrc_LONGEST_EQUAL: Int
+  gsrc_SHORTEST_EQUAL: Int
+  gsrc_GT: Int
+  gsrc_AVERAGE_GT: Float
+  gsrc_LONGEST_GT: Int
+  gsrc_SHORTEST_GT: Int
+  gsrc_GTE: Int
+  gsrc_AVERAGE_GTE: Float
+  gsrc_LONGEST_GTE: Int
+  gsrc_SHORTEST_GTE: Int
+  gsrc_LT: Int
+  gsrc_AVERAGE_LT: Float
+  gsrc_LONGEST_LT: Int
+  gsrc_SHORTEST_LT: Int
+  gsrc_LTE: Int
+  gsrc_AVERAGE_LTE: Float
+  gsrc_LONGEST_LTE: Int
+  gsrc_SHORTEST_LTE: Int
+  dsrc_EQUAL: String
+  dsrc_AVERAGE_EQUAL: Float
+  dsrc_LONGEST_EQUAL: Int
+  dsrc_SHORTEST_EQUAL: Int
+  dsrc_GT: Int
+  dsrc_AVERAGE_GT: Float
+  dsrc_LONGEST_GT: Int
+  dsrc_SHORTEST_GT: Int
+  dsrc_GTE: Int
+  dsrc_AVERAGE_GTE: Float
+  dsrc_LONGEST_GTE: Int
+  dsrc_SHORTEST_GTE: Int
+  dsrc_LT: Int
+  dsrc_AVERAGE_LT: Float
+  dsrc_LONGEST_LT: Int
+  dsrc_SHORTEST_LT: Int
+  dsrc_LTE: Int
+  dsrc_AVERAGE_LTE: Float
+  dsrc_LONGEST_LTE: Int
+  dsrc_SHORTEST_LTE: Int
+  depth_EQUAL: Int
+  depth_AVERAGE_EQUAL: Float
+  depth_MIN_EQUAL: Int
+  depth_MAX_EQUAL: Int
+  depth_SUM_EQUAL: Int
+  depth_GT: Int
+  depth_AVERAGE_GT: Float
+  depth_MIN_GT: Int
+  depth_MAX_GT: Int
+  depth_SUM_GT: Int
+  depth_GTE: Int
+  depth_AVERAGE_GTE: Float
+  depth_MIN_GTE: Int
+  depth_MAX_GTE: Int
+  depth_SUM_GTE: Int
+  depth_LT: Int
+  depth_AVERAGE_LT: Float
+  depth_MIN_LT: Int
+  depth_MAX_LT: Int
+  depth_SUM_LT: Int
+  depth_LTE: Int
+  depth_AVERAGE_LTE: Float
+  depth_MIN_LTE: Int
+  depth_MAX_LTE: Int
+  depth_SUM_LTE: Int
+  childSize_EQUAL: Int
+  childSize_AVERAGE_EQUAL: Float
+  childSize_MIN_EQUAL: Int
+  childSize_MAX_EQUAL: Int
+  childSize_SUM_EQUAL: Int
+  childSize_GT: Int
+  childSize_AVERAGE_GT: Float
+  childSize_MIN_GT: Int
+  childSize_MAX_GT: Int
+  childSize_SUM_GT: Int
+  childSize_GTE: Int
+  childSize_AVERAGE_GTE: Float
+  childSize_MIN_GTE: Int
+  childSize_MAX_GTE: Int
+  childSize_SUM_GTE: Int
+  childSize_LT: Int
+  childSize_AVERAGE_LT: Float
+  childSize_MIN_LT: Int
+  childSize_MAX_LT: Int
+  childSize_SUM_LT: Int
+  childSize_LTE: Int
+  childSize_AVERAGE_LTE: Float
+  childSize_MIN_LTE: Int
+  childSize_MAX_LTE: Int
+  childSize_SUM_LTE: Int
+  sisonSize_EQUAL: Int
+  sisonSize_AVERAGE_EQUAL: Float
+  sisonSize_MIN_EQUAL: Int
+  sisonSize_MAX_EQUAL: Int
+  sisonSize_SUM_EQUAL: Int
+  sisonSize_GT: Int
+  sisonSize_AVERAGE_GT: Float
+  sisonSize_MIN_GT: Int
+  sisonSize_MAX_GT: Int
+  sisonSize_SUM_GT: Int
+  sisonSize_GTE: Int
+  sisonSize_AVERAGE_GTE: Float
+  sisonSize_MIN_GTE: Int
+  sisonSize_MAX_GTE: Int
+  sisonSize_SUM_GTE: Int
+  sisonSize_LT: Int
+  sisonSize_AVERAGE_LT: Float
+  sisonSize_MIN_LT: Int
+  sisonSize_MAX_LT: Int
+  sisonSize_SUM_LT: Int
+  sisonSize_LTE: Int
+  sisonSize_AVERAGE_LTE: Float
+  sisonSize_MIN_LTE: Int
+  sisonSize_MAX_LTE: Int
+  sisonSize_SUM_LTE: Int
+  syndex_EQUAL: Int
+  syndex_AVERAGE_EQUAL: Float
+  syndex_MIN_EQUAL: Int
+  syndex_MAX_EQUAL: Int
+  syndex_SUM_EQUAL: Int
+  syndex_GT: Int
+  syndex_AVERAGE_GT: Float
+  syndex_MIN_GT: Int
+  syndex_MAX_GT: Int
+  syndex_SUM_GT: Int
+  syndex_GTE: Int
+  syndex_AVERAGE_GTE: Float
+  syndex_MIN_GTE: Int
+  syndex_MAX_GTE: Int
+  syndex_SUM_GTE: Int
+  syndex_LT: Int
+  syndex_AVERAGE_LT: Float
+  syndex_MIN_LT: Int
+  syndex_MAX_LT: Int
+  syndex_SUM_LT: Int
+  syndex_LTE: Int
+  syndex_AVERAGE_LTE: Float
+  syndex_MIN_LTE: Int
+  syndex_MAX_LTE: Int
+  syndex_SUM_LTE: Int
+  updateCount_EQUAL: Int
+  updateCount_AVERAGE_EQUAL: Float
+  updateCount_MIN_EQUAL: Int
+  updateCount_MAX_EQUAL: Int
+  updateCount_SUM_EQUAL: Int
+  updateCount_GT: Int
+  updateCount_AVERAGE_GT: Float
+  updateCount_MIN_GT: Int
+  updateCount_MAX_GT: Int
+  updateCount_SUM_GT: Int
+  updateCount_GTE: Int
+  updateCount_AVERAGE_GTE: Float
+  updateCount_MIN_GTE: Int
+  updateCount_MAX_GTE: Int
+  updateCount_SUM_GTE: Int
+  updateCount_LT: Int
+  updateCount_AVERAGE_LT: Float
+  updateCount_MIN_LT: Int
+  updateCount_MAX_LT: Int
+  updateCount_SUM_LT: Int
+  updateCount_LTE: Int
+  updateCount_AVERAGE_LTE: Float
+  updateCount_MIN_LTE: Int
+  updateCount_MAX_LTE: Int
+  updateCount_SUM_LTE: Int
+  createdAt_EQUAL: AWSDateTime
+  createdAt_MIN_EQUAL: AWSDateTime
+  createdAt_MAX_EQUAL: AWSDateTime
+  createdAt_GT: AWSDateTime
+  createdAt_MIN_GT: AWSDateTime
+  createdAt_MAX_GT: AWSDateTime
+  createdAt_GTE: AWSDateTime
+  createdAt_MIN_GTE: AWSDateTime
+  createdAt_MAX_GTE: AWSDateTime
+  createdAt_LT: AWSDateTime
+  createdAt_MIN_LT: AWSDateTime
+  createdAt_MAX_LT: AWSDateTime
+  createdAt_LTE: AWSDateTime
+  createdAt_MIN_LTE: AWSDateTime
+  createdAt_MAX_LTE: AWSDateTime
+  lastModified_EQUAL: AWSDateTime
+  lastModified_MIN_EQUAL: AWSDateTime
+  lastModified_MAX_EQUAL: AWSDateTime
+  lastModified_GT: AWSDateTime
+  lastModified_MIN_GT: AWSDateTime
+  lastModified_MAX_GT: AWSDateTime
+  lastModified_GTE: AWSDateTime
+  lastModified_MIN_GTE: AWSDateTime
+  lastModified_MAX_GTE: AWSDateTime
+  lastModified_LT: AWSDateTime
+  lastModified_MIN_LT: AWSDateTime
+  lastModified_MAX_LT: AWSDateTime
+  lastModified_LTE: AWSDateTime
+  lastModified_MIN_LTE: AWSDateTime
+  lastModified_MAX_LTE: AWSDateTime
+}
+
+input wnJwljUpdateConnectionInput {
+  node: wnUpdateInput
+  edge: RelUpdateInput
+}
+
+input wnJwljUpdateFieldInput {
+  where: wnJwljConnectionWhere
+  update: wnJwljUpdateConnectionInput
+  connect: [wnJwljConnectFieldInput!]
+  disconnect: [wnJwljDisconnectFieldInput!]
+  create: [wnJwljCreateFieldInput!]
+  delete: [wnJwljDeleteFieldInput!]
+}
+
+input wnJwlkAggregateInput {
+  count: Int
+  count_LT: Int
+  count_LTE: Int
+  count_GT: Int
+  count_GTE: Int
+  AND: [wnJwlkAggregateInput!]
+  OR: [wnJwlkAggregateInput!]
+  node: wnJwlkNodeAggregationWhereInput
+}
+
+input wnJwlkConnectFieldInput {
+  where: wnConnectWhere
+  connect: [wnConnectInput!]
+  edge: RelCreateInput
+}
+
+input wnJwlkConnectionSort {
+  edge: RelSort
+  node: wnSort
+}
+
+input wnJwlkConnectionWhere {
+  AND: [wnJwlkConnectionWhere!]
+  OR: [wnJwlkConnectionWhere!]
+  edge: RelWhere
+  edge_NOT: RelWhere
+  node: wnWhere
+  node_NOT: wnWhere
+}
+
+input wnJwlkCreateFieldInput {
+  node: wnCreateInput!
+  edge: RelCreateInput
+}
+
+input wnJwlkDeleteFieldInput {
+  where: wnJwlkConnectionWhere
+  delete: wnDeleteInput
+}
+
+input wnJwlkDisconnectFieldInput {
+  where: wnJwlkConnectionWhere
+  disconnect: wnDisconnectInput
+}
+
+input wnJwlkFieldInput {
+  create: [wnJwlkCreateFieldInput!]
+  connect: [wnJwlkConnectFieldInput!]
+}
+
+input wnJwlkNodeAggregationWhereInput {
+  AND: [wnJwlkNodeAggregationWhereInput!]
+  OR: [wnJwlkNodeAggregationWhereInput!]
+  id_EQUAL: String
+  id_AVERAGE_EQUAL: Float
+  id_LONGEST_EQUAL: Int
+  id_SHORTEST_EQUAL: Int
+  id_GT: Int
+  id_AVERAGE_GT: Float
+  id_LONGEST_GT: Int
+  id_SHORTEST_GT: Int
+  id_GTE: Int
+  id_AVERAGE_GTE: Float
+  id_LONGEST_GTE: Int
+  id_SHORTEST_GTE: Int
+  id_LT: Int
+  id_AVERAGE_LT: Float
+  id_LONGEST_LT: Int
+  id_SHORTEST_LT: Int
+  id_LTE: Int
+  id_AVERAGE_LTE: Float
+  id_LONGEST_LTE: Int
+  id_SHORTEST_LTE: Int
+  spell_EQUAL: String
+  spell_AVERAGE_EQUAL: Float
+  spell_LONGEST_EQUAL: Int
+  spell_SHORTEST_EQUAL: Int
+  spell_GT: Int
+  spell_AVERAGE_GT: Float
+  spell_LONGEST_GT: Int
+  spell_SHORTEST_GT: Int
+  spell_GTE: Int
+  spell_AVERAGE_GTE: Float
+  spell_LONGEST_GTE: Int
+  spell_SHORTEST_GTE: Int
+  spell_LT: Int
+  spell_AVERAGE_LT: Float
+  spell_LONGEST_LT: Int
+  spell_SHORTEST_LT: Int
+  spell_LTE: Int
+  spell_AVERAGE_LTE: Float
+  spell_LONGEST_LTE: Int
+  spell_SHORTEST_LTE: Int
+  sep_EQUAL: String
+  sep_AVERAGE_EQUAL: Float
+  sep_LONGEST_EQUAL: Int
+  sep_SHORTEST_EQUAL: Int
+  sep_GT: Int
+  sep_AVERAGE_GT: Float
+  sep_LONGEST_GT: Int
+  sep_SHORTEST_GT: Int
+  sep_GTE: Int
+  sep_AVERAGE_GTE: Float
+  sep_LONGEST_GTE: Int
+  sep_SHORTEST_GTE: Int
+  sep_LT: Int
+  sep_AVERAGE_LT: Float
+  sep_LONGEST_LT: Int
+  sep_SHORTEST_LT: Int
+  sep_LTE: Int
+  sep_AVERAGE_LTE: Float
+  sep_LONGEST_LTE: Int
+  sep_SHORTEST_LTE: Int
+  name_EQUAL: String
+  name_AVERAGE_EQUAL: Float
+  name_LONGEST_EQUAL: Int
+  name_SHORTEST_EQUAL: Int
+  name_GT: Int
+  name_AVERAGE_GT: Float
+  name_LONGEST_GT: Int
+  name_SHORTEST_GT: Int
+  name_GTE: Int
+  name_AVERAGE_GTE: Float
+  name_LONGEST_GTE: Int
+  name_SHORTEST_GTE: Int
+  name_LT: Int
+  name_AVERAGE_LT: Float
+  name_LONGEST_LT: Int
+  name_SHORTEST_LT: Int
+  name_LTE: Int
+  name_AVERAGE_LTE: Float
+  name_LONGEST_LTE: Int
+  name_SHORTEST_LTE: Int
+  glo_EQUAL: String
+  glo_AVERAGE_EQUAL: Float
+  glo_LONGEST_EQUAL: Int
+  glo_SHORTEST_EQUAL: Int
+  glo_GT: Int
+  glo_AVERAGE_GT: Float
+  glo_LONGEST_GT: Int
+  glo_SHORTEST_GT: Int
+  glo_GTE: Int
+  glo_AVERAGE_GTE: Float
+  glo_LONGEST_GTE: Int
+  glo_SHORTEST_GTE: Int
+  glo_LT: Int
+  glo_AVERAGE_LT: Float
+  glo_LONGEST_LT: Int
+  glo_SHORTEST_LT: Int
+  glo_LTE: Int
+  glo_AVERAGE_LTE: Float
+  glo_LONGEST_LTE: Int
+  glo_SHORTEST_LTE: Int
+  glojp_EQUAL: String
+  glojp_AVERAGE_EQUAL: Float
+  glojp_LONGEST_EQUAL: Int
+  glojp_SHORTEST_EQUAL: Int
+  glojp_GT: Int
+  glojp_AVERAGE_GT: Float
+  glojp_LONGEST_GT: Int
+  glojp_SHORTEST_GT: Int
+  glojp_GTE: Int
+  glojp_AVERAGE_GTE: Float
+  glojp_LONGEST_GTE: Int
+  glojp_SHORTEST_GTE: Int
+  glojp_LT: Int
+  glojp_AVERAGE_LT: Float
+  glojp_LONGEST_LT: Int
+  glojp_SHORTEST_LT: Int
+  glojp_LTE: Int
+  glojp_AVERAGE_LTE: Float
+  glojp_LONGEST_LTE: Int
+  glojp_SHORTEST_LTE: Int
+  lm_EQUAL: String
+  lm_AVERAGE_EQUAL: Float
+  lm_LONGEST_EQUAL: Int
+  lm_SHORTEST_EQUAL: Int
+  lm_GT: Int
+  lm_AVERAGE_GT: Float
+  lm_LONGEST_GT: Int
+  lm_SHORTEST_GT: Int
+  lm_GTE: Int
+  lm_AVERAGE_GTE: Float
+  lm_LONGEST_GTE: Int
+  lm_SHORTEST_GTE: Int
+  lm_LT: Int
+  lm_AVERAGE_LT: Float
+  lm_LONGEST_LT: Int
+  lm_SHORTEST_LT: Int
+  lm_LTE: Int
+  lm_AVERAGE_LTE: Float
+  lm_LONGEST_LTE: Int
+  lm_SHORTEST_LTE: Int
+  lmjp_EQUAL: String
+  lmjp_AVERAGE_EQUAL: Float
+  lmjp_LONGEST_EQUAL: Int
+  lmjp_SHORTEST_EQUAL: Int
+  lmjp_GT: Int
+  lmjp_AVERAGE_GT: Float
+  lmjp_LONGEST_GT: Int
+  lmjp_SHORTEST_GT: Int
+  lmjp_GTE: Int
+  lmjp_AVERAGE_GTE: Float
+  lmjp_LONGEST_GTE: Int
+  lmjp_SHORTEST_GTE: Int
+  lmjp_LT: Int
+  lmjp_AVERAGE_LT: Float
+  lmjp_LONGEST_LT: Int
+  lmjp_SHORTEST_LT: Int
+  lmjp_LTE: Int
+  lmjp_AVERAGE_LTE: Float
+  lmjp_LONGEST_LTE: Int
+  lmjp_SHORTEST_LTE: Int
+  ex_EQUAL: String
+  ex_AVERAGE_EQUAL: Float
+  ex_LONGEST_EQUAL: Int
+  ex_SHORTEST_EQUAL: Int
+  ex_GT: Int
+  ex_AVERAGE_GT: Float
+  ex_LONGEST_GT: Int
+  ex_SHORTEST_GT: Int
+  ex_GTE: Int
+  ex_AVERAGE_GTE: Float
+  ex_LONGEST_GTE: Int
+  ex_SHORTEST_GTE: Int
+  ex_LT: Int
+  ex_AVERAGE_LT: Float
+  ex_LONGEST_LT: Int
+  ex_SHORTEST_LT: Int
+  ex_LTE: Int
+  ex_AVERAGE_LTE: Float
+  ex_LONGEST_LTE: Int
+  ex_SHORTEST_LTE: Int
+  exjp_EQUAL: String
+  exjp_AVERAGE_EQUAL: Float
+  exjp_LONGEST_EQUAL: Int
+  exjp_SHORTEST_EQUAL: Int
+  exjp_GT: Int
+  exjp_AVERAGE_GT: Float
+  exjp_LONGEST_GT: Int
+  exjp_SHORTEST_GT: Int
+  exjp_GTE: Int
+  exjp_AVERAGE_GTE: Float
+  exjp_LONGEST_GTE: Int
+  exjp_SHORTEST_GTE: Int
+  exjp_LT: Int
+  exjp_AVERAGE_LT: Float
+  exjp_LONGEST_LT: Int
+  exjp_SHORTEST_LT: Int
+  exjp_LTE: Int
+  exjp_AVERAGE_LTE: Float
+  exjp_LONGEST_LTE: Int
+  exjp_SHORTEST_LTE: Int
+  pos_EQUAL: String
+  pos_AVERAGE_EQUAL: Float
+  pos_LONGEST_EQUAL: Int
+  pos_SHORTEST_EQUAL: Int
+  pos_GT: Int
+  pos_AVERAGE_GT: Float
+  pos_LONGEST_GT: Int
+  pos_SHORTEST_GT: Int
+  pos_GTE: Int
+  pos_AVERAGE_GTE: Float
+  pos_LONGEST_GTE: Int
+  pos_SHORTEST_GTE: Int
+  pos_LT: Int
+  pos_AVERAGE_LT: Float
+  pos_LONGEST_LT: Int
+  pos_SHORTEST_LT: Int
+  pos_LTE: Int
+  pos_AVERAGE_LTE: Float
+  pos_LONGEST_LTE: Int
+  pos_SHORTEST_LTE: Int
+  princetonLink_EQUAL: String
+  princetonLink_AVERAGE_EQUAL: Float
+  princetonLink_LONGEST_EQUAL: Int
+  princetonLink_SHORTEST_EQUAL: Int
+  princetonLink_GT: Int
+  princetonLink_AVERAGE_GT: Float
+  princetonLink_LONGEST_GT: Int
+  princetonLink_SHORTEST_GT: Int
+  princetonLink_GTE: Int
+  princetonLink_AVERAGE_GTE: Float
+  princetonLink_LONGEST_GTE: Int
+  princetonLink_SHORTEST_GTE: Int
+  princetonLink_LT: Int
+  princetonLink_AVERAGE_LT: Float
+  princetonLink_LONGEST_LT: Int
+  princetonLink_SHORTEST_LT: Int
+  princetonLink_LTE: Int
+  princetonLink_AVERAGE_LTE: Float
+  princetonLink_LONGEST_LTE: Int
+  princetonLink_SHORTEST_LTE: Int
+  gsrc_EQUAL: String
+  gsrc_AVERAGE_EQUAL: Float
+  gsrc_LONGEST_EQUAL: Int
+  gsrc_SHORTEST_EQUAL: Int
+  gsrc_GT: Int
+  gsrc_AVERAGE_GT: Float
+  gsrc_LONGEST_GT: Int
+  gsrc_SHORTEST_GT: Int
+  gsrc_GTE: Int
+  gsrc_AVERAGE_GTE: Float
+  gsrc_LONGEST_GTE: Int
+  gsrc_SHORTEST_GTE: Int
+  gsrc_LT: Int
+  gsrc_AVERAGE_LT: Float
+  gsrc_LONGEST_LT: Int
+  gsrc_SHORTEST_LT: Int
+  gsrc_LTE: Int
+  gsrc_AVERAGE_LTE: Float
+  gsrc_LONGEST_LTE: Int
+  gsrc_SHORTEST_LTE: Int
+  dsrc_EQUAL: String
+  dsrc_AVERAGE_EQUAL: Float
+  dsrc_LONGEST_EQUAL: Int
+  dsrc_SHORTEST_EQUAL: Int
+  dsrc_GT: Int
+  dsrc_AVERAGE_GT: Float
+  dsrc_LONGEST_GT: Int
+  dsrc_SHORTEST_GT: Int
+  dsrc_GTE: Int
+  dsrc_AVERAGE_GTE: Float
+  dsrc_LONGEST_GTE: Int
+  dsrc_SHORTEST_GTE: Int
+  dsrc_LT: Int
+  dsrc_AVERAGE_LT: Float
+  dsrc_LONGEST_LT: Int
+  dsrc_SHORTEST_LT: Int
+  dsrc_LTE: Int
+  dsrc_AVERAGE_LTE: Float
+  dsrc_LONGEST_LTE: Int
+  dsrc_SHORTEST_LTE: Int
+  depth_EQUAL: Int
+  depth_AVERAGE_EQUAL: Float
+  depth_MIN_EQUAL: Int
+  depth_MAX_EQUAL: Int
+  depth_SUM_EQUAL: Int
+  depth_GT: Int
+  depth_AVERAGE_GT: Float
+  depth_MIN_GT: Int
+  depth_MAX_GT: Int
+  depth_SUM_GT: Int
+  depth_GTE: Int
+  depth_AVERAGE_GTE: Float
+  depth_MIN_GTE: Int
+  depth_MAX_GTE: Int
+  depth_SUM_GTE: Int
+  depth_LT: Int
+  depth_AVERAGE_LT: Float
+  depth_MIN_LT: Int
+  depth_MAX_LT: Int
+  depth_SUM_LT: Int
+  depth_LTE: Int
+  depth_AVERAGE_LTE: Float
+  depth_MIN_LTE: Int
+  depth_MAX_LTE: Int
+  depth_SUM_LTE: Int
+  childSize_EQUAL: Int
+  childSize_AVERAGE_EQUAL: Float
+  childSize_MIN_EQUAL: Int
+  childSize_MAX_EQUAL: Int
+  childSize_SUM_EQUAL: Int
+  childSize_GT: Int
+  childSize_AVERAGE_GT: Float
+  childSize_MIN_GT: Int
+  childSize_MAX_GT: Int
+  childSize_SUM_GT: Int
+  childSize_GTE: Int
+  childSize_AVERAGE_GTE: Float
+  childSize_MIN_GTE: Int
+  childSize_MAX_GTE: Int
+  childSize_SUM_GTE: Int
+  childSize_LT: Int
+  childSize_AVERAGE_LT: Float
+  childSize_MIN_LT: Int
+  childSize_MAX_LT: Int
+  childSize_SUM_LT: Int
+  childSize_LTE: Int
+  childSize_AVERAGE_LTE: Float
+  childSize_MIN_LTE: Int
+  childSize_MAX_LTE: Int
+  childSize_SUM_LTE: Int
+  sisonSize_EQUAL: Int
+  sisonSize_AVERAGE_EQUAL: Float
+  sisonSize_MIN_EQUAL: Int
+  sisonSize_MAX_EQUAL: Int
+  sisonSize_SUM_EQUAL: Int
+  sisonSize_GT: Int
+  sisonSize_AVERAGE_GT: Float
+  sisonSize_MIN_GT: Int
+  sisonSize_MAX_GT: Int
+  sisonSize_SUM_GT: Int
+  sisonSize_GTE: Int
+  sisonSize_AVERAGE_GTE: Float
+  sisonSize_MIN_GTE: Int
+  sisonSize_MAX_GTE: Int
+  sisonSize_SUM_GTE: Int
+  sisonSize_LT: Int
+  sisonSize_AVERAGE_LT: Float
+  sisonSize_MIN_LT: Int
+  sisonSize_MAX_LT: Int
+  sisonSize_SUM_LT: Int
+  sisonSize_LTE: Int
+  sisonSize_AVERAGE_LTE: Float
+  sisonSize_MIN_LTE: Int
+  sisonSize_MAX_LTE: Int
+  sisonSize_SUM_LTE: Int
+  syndex_EQUAL: Int
+  syndex_AVERAGE_EQUAL: Float
+  syndex_MIN_EQUAL: Int
+  syndex_MAX_EQUAL: Int
+  syndex_SUM_EQUAL: Int
+  syndex_GT: Int
+  syndex_AVERAGE_GT: Float
+  syndex_MIN_GT: Int
+  syndex_MAX_GT: Int
+  syndex_SUM_GT: Int
+  syndex_GTE: Int
+  syndex_AVERAGE_GTE: Float
+  syndex_MIN_GTE: Int
+  syndex_MAX_GTE: Int
+  syndex_SUM_GTE: Int
+  syndex_LT: Int
+  syndex_AVERAGE_LT: Float
+  syndex_MIN_LT: Int
+  syndex_MAX_LT: Int
+  syndex_SUM_LT: Int
+  syndex_LTE: Int
+  syndex_AVERAGE_LTE: Float
+  syndex_MIN_LTE: Int
+  syndex_MAX_LTE: Int
+  syndex_SUM_LTE: Int
+  updateCount_EQUAL: Int
+  updateCount_AVERAGE_EQUAL: Float
+  updateCount_MIN_EQUAL: Int
+  updateCount_MAX_EQUAL: Int
+  updateCount_SUM_EQUAL: Int
+  updateCount_GT: Int
+  updateCount_AVERAGE_GT: Float
+  updateCount_MIN_GT: Int
+  updateCount_MAX_GT: Int
+  updateCount_SUM_GT: Int
+  updateCount_GTE: Int
+  updateCount_AVERAGE_GTE: Float
+  updateCount_MIN_GTE: Int
+  updateCount_MAX_GTE: Int
+  updateCount_SUM_GTE: Int
+  updateCount_LT: Int
+  updateCount_AVERAGE_LT: Float
+  updateCount_MIN_LT: Int
+  updateCount_MAX_LT: Int
+  updateCount_SUM_LT: Int
+  updateCount_LTE: Int
+  updateCount_AVERAGE_LTE: Float
+  updateCount_MIN_LTE: Int
+  updateCount_MAX_LTE: Int
+  updateCount_SUM_LTE: Int
+  createdAt_EQUAL: AWSDateTime
+  createdAt_MIN_EQUAL: AWSDateTime
+  createdAt_MAX_EQUAL: AWSDateTime
+  createdAt_GT: AWSDateTime
+  createdAt_MIN_GT: AWSDateTime
+  createdAt_MAX_GT: AWSDateTime
+  createdAt_GTE: AWSDateTime
+  createdAt_MIN_GTE: AWSDateTime
+  createdAt_MAX_GTE: AWSDateTime
+  createdAt_LT: AWSDateTime
+  createdAt_MIN_LT: AWSDateTime
+  createdAt_MAX_LT: AWSDateTime
+  createdAt_LTE: AWSDateTime
+  createdAt_MIN_LTE: AWSDateTime
+  createdAt_MAX_LTE: AWSDateTime
+  lastModified_EQUAL: AWSDateTime
+  lastModified_MIN_EQUAL: AWSDateTime
+  lastModified_MAX_EQUAL: AWSDateTime
+  lastModified_GT: AWSDateTime
+  lastModified_MIN_GT: AWSDateTime
+  lastModified_MAX_GT: AWSDateTime
+  lastModified_GTE: AWSDateTime
+  lastModified_MIN_GTE: AWSDateTime
+  lastModified_MAX_GTE: AWSDateTime
+  lastModified_LT: AWSDateTime
+  lastModified_MIN_LT: AWSDateTime
+  lastModified_MAX_LT: AWSDateTime
+  lastModified_LTE: AWSDateTime
+  lastModified_MIN_LTE: AWSDateTime
+  lastModified_MAX_LTE: AWSDateTime
+}
+
+input wnJwlkUpdateConnectionInput {
+  node: wnUpdateInput
+  edge: RelUpdateInput
+}
+
+input wnJwlkUpdateFieldInput {
+  where: wnJwlkConnectionWhere
+  update: wnJwlkUpdateConnectionInput
+  connect: [wnJwlkConnectFieldInput!]
+  disconnect: [wnJwlkDisconnectFieldInput!]
+  create: [wnJwlkCreateFieldInput!]
+  delete: [wnJwlkDeleteFieldInput!]
+}
+
+input wnLmsjppushAggregateInput {
+  count: Int
+  count_LT: Int
+  count_LTE: Int
+  count_GT: Int
+  count_GTE: Int
+  AND: [wnLmsjppushAggregateInput!]
+  OR: [wnLmsjppushAggregateInput!]
+  node: wnLmsjppushNodeAggregationWhereInput
+}
+
+input wnLmsjppushConnectFieldInput {
+  where: PushConnectWhere
+  connect: [PushConnectInput!]
+}
+
+input wnLmsjppushConnectionSort {
+  node: PushSort
+}
+
+input wnLmsjppushConnectionWhere {
+  AND: [wnLmsjppushConnectionWhere!]
+  OR: [wnLmsjppushConnectionWhere!]
+  node: PushWhere
+  node_NOT: PushWhere
+}
+
+input wnLmsjppushConnectOrCreateFieldInput {
+  where: PushConnectOrCreateWhere!
+  onCreate: wnLmsjppushConnectOrCreateFieldInputOnCreate!
+}
+
+input wnLmsjppushConnectOrCreateFieldInputOnCreate {
+  node: PushOnCreateInput!
+}
+
+input wnLmsjppushCreateFieldInput {
+  node: PushCreateInput!
+}
+
+input wnLmsjppushDeleteFieldInput {
+  where: wnLmsjppushConnectionWhere
+  delete: PushDeleteInput
+}
+
+input wnLmsjppushDisconnectFieldInput {
+  where: wnLmsjppushConnectionWhere
+  disconnect: PushDisconnectInput
+}
+
+input wnLmsjppushFieldInput {
+  create: [wnLmsjppushCreateFieldInput!]
+  connect: [wnLmsjppushConnectFieldInput!]
+  connectOrCreate: [wnLmsjppushConnectOrCreateFieldInput!]
+}
+
+input wnLmsjppushNodeAggregationWhereInput {
+  AND: [wnLmsjppushNodeAggregationWhereInput!]
+  OR: [wnLmsjppushNodeAggregationWhereInput!]
+  id_EQUAL: ID
+  push_EQUAL: String
+  push_AVERAGE_EQUAL: Float
+  push_LONGEST_EQUAL: Int
+  push_SHORTEST_EQUAL: Int
+  push_GT: Int
+  push_AVERAGE_GT: Float
+  push_LONGEST_GT: Int
+  push_SHORTEST_GT: Int
+  push_GTE: Int
+  push_AVERAGE_GTE: Float
+  push_LONGEST_GTE: Int
+  push_SHORTEST_GTE: Int
+  push_LT: Int
+  push_AVERAGE_LT: Float
+  push_LONGEST_LT: Int
+  push_SHORTEST_LT: Int
+  push_LTE: Int
+  push_AVERAGE_LTE: Float
+  push_LONGEST_LTE: Int
+  push_SHORTEST_LTE: Int
+  lang_EQUAL: String
+  lang_AVERAGE_EQUAL: Float
+  lang_LONGEST_EQUAL: Int
+  lang_SHORTEST_EQUAL: Int
+  lang_GT: Int
+  lang_AVERAGE_GT: Float
+  lang_LONGEST_GT: Int
+  lang_SHORTEST_GT: Int
+  lang_GTE: Int
+  lang_AVERAGE_GTE: Float
+  lang_LONGEST_GTE: Int
+  lang_SHORTEST_GTE: Int
+  lang_LT: Int
+  lang_AVERAGE_LT: Float
+  lang_LONGEST_LT: Int
+  lang_SHORTEST_LT: Int
+  lang_LTE: Int
+  lang_AVERAGE_LTE: Float
+  lang_LONGEST_LTE: Int
+  lang_SHORTEST_LTE: Int
+}
+
+input wnLmsjppushUpdateConnectionInput {
+  node: PushUpdateInput
+}
+
+input wnLmsjppushUpdateFieldInput {
+  where: wnLmsjppushConnectionWhere
+  update: wnLmsjppushUpdateConnectionInput
+  connect: [wnLmsjppushConnectFieldInput!]
+  disconnect: [wnLmsjppushDisconnectFieldInput!]
+  create: [wnLmsjppushCreateFieldInput!]
+  delete: [wnLmsjppushDeleteFieldInput!]
+  connectOrCreate: [wnLmsjppushConnectOrCreateFieldInput!]
+}
+
+input wnLmspushAggregateInput {
+  count: Int
+  count_LT: Int
+  count_LTE: Int
+  count_GT: Int
+  count_GTE: Int
+  AND: [wnLmspushAggregateInput!]
+  OR: [wnLmspushAggregateInput!]
+  node: wnLmspushNodeAggregationWhereInput
+}
+
+input wnLmspushConnectFieldInput {
+  where: PushConnectWhere
+  connect: [PushConnectInput!]
+}
+
+input wnLmspushConnectionSort {
+  node: PushSort
+}
+
+input wnLmspushConnectionWhere {
+  AND: [wnLmspushConnectionWhere!]
+  OR: [wnLmspushConnectionWhere!]
+  node: PushWhere
+  node_NOT: PushWhere
+}
+
+input wnLmspushConnectOrCreateFieldInput {
+  where: PushConnectOrCreateWhere!
+  onCreate: wnLmspushConnectOrCreateFieldInputOnCreate!
+}
+
+input wnLmspushConnectOrCreateFieldInputOnCreate {
+  node: PushOnCreateInput!
+}
+
+input wnLmspushCreateFieldInput {
+  node: PushCreateInput!
+}
+
+input wnLmspushDeleteFieldInput {
+  where: wnLmspushConnectionWhere
+  delete: PushDeleteInput
+}
+
+input wnLmspushDisconnectFieldInput {
+  where: wnLmspushConnectionWhere
+  disconnect: PushDisconnectInput
+}
+
+input wnLmspushFieldInput {
+  create: [wnLmspushCreateFieldInput!]
+  connect: [wnLmspushConnectFieldInput!]
+  connectOrCreate: [wnLmspushConnectOrCreateFieldInput!]
+}
+
+input wnLmspushNodeAggregationWhereInput {
+  AND: [wnLmspushNodeAggregationWhereInput!]
+  OR: [wnLmspushNodeAggregationWhereInput!]
+  id_EQUAL: ID
+  push_EQUAL: String
+  push_AVERAGE_EQUAL: Float
+  push_LONGEST_EQUAL: Int
+  push_SHORTEST_EQUAL: Int
+  push_GT: Int
+  push_AVERAGE_GT: Float
+  push_LONGEST_GT: Int
+  push_SHORTEST_GT: Int
+  push_GTE: Int
+  push_AVERAGE_GTE: Float
+  push_LONGEST_GTE: Int
+  push_SHORTEST_GTE: Int
+  push_LT: Int
+  push_AVERAGE_LT: Float
+  push_LONGEST_LT: Int
+  push_SHORTEST_LT: Int
+  push_LTE: Int
+  push_AVERAGE_LTE: Float
+  push_LONGEST_LTE: Int
+  push_SHORTEST_LTE: Int
+  lang_EQUAL: String
+  lang_AVERAGE_EQUAL: Float
+  lang_LONGEST_EQUAL: Int
+  lang_SHORTEST_EQUAL: Int
+  lang_GT: Int
+  lang_AVERAGE_GT: Float
+  lang_LONGEST_GT: Int
+  lang_SHORTEST_GT: Int
+  lang_GTE: Int
+  lang_AVERAGE_GTE: Float
+  lang_LONGEST_GTE: Int
+  lang_SHORTEST_GTE: Int
+  lang_LT: Int
+  lang_AVERAGE_LT: Float
+  lang_LONGEST_LT: Int
+  lang_SHORTEST_LT: Int
+  lang_LTE: Int
+  lang_AVERAGE_LTE: Float
+  lang_LONGEST_LTE: Int
+  lang_SHORTEST_LTE: Int
+}
+
+input wnLmspushUpdateConnectionInput {
+  node: PushUpdateInput
+}
+
+input wnLmspushUpdateFieldInput {
+  where: wnLmspushConnectionWhere
+  update: wnLmspushUpdateConnectionInput
+  connect: [wnLmspushConnectFieldInput!]
+  disconnect: [wnLmspushDisconnectFieldInput!]
+  create: [wnLmspushCreateFieldInput!]
+  delete: [wnLmspushDeleteFieldInput!]
+  connectOrCreate: [wnLmspushConnectOrCreateFieldInput!]
+}
+
+input wnOptions {
+# """
+# Specify one or more wnSort objects to sort Wns by. The sorts will be applied in the order in which they are arranged in the array.
+# """
+  sort: [wnSort!]
+  limit: Int
+  offset: Int
+}
+
+input wnRelationInput {
+  lmspush: [wnLmspushCreateFieldInput!]
+  lmsjppush: [wnLmsjppushCreateFieldInput!]
+  jwlk: [wnJwlkCreateFieldInput!]
+  jwlj: [wnJwljCreateFieldInput!]
+}
+
+# """
+# Fields to sort Wns by. The order in which sorts are applied is not guaranteed when specifying many fields in one wnSort object.
+# """
+input wnSort {
+  id: SortDirection
+  spell: SortDirection
+  sep: SortDirection
+  name: SortDirection
+  glo: SortDirection
+  glojp: SortDirection
+  lm: SortDirection
+  lmjp: SortDirection
+  ex: SortDirection
+  exjp: SortDirection
+  pos: SortDirection
+  depth: SortDirection
+  childSize: SortDirection
+  sisonSize: SortDirection
+  syndex: SortDirection
+  princetonLink: SortDirection
+  gsrc: SortDirection
+  dsrc: SortDirection
+  updateCount: SortDirection
+  createdAt: SortDirection
+  lastModified: SortDirection
+}
+
+input wnUpdateInput {
+  id: String
+  spell: String
+  seps: [String!]
+  sep: String
+  name: String
+  glo: String
+  glojp: String
+  lm: String
+  lmjp: String
+  lms: [String]
+  lmsjp: [String]
+  ex: String
+  exjp: String
+  exs: [String]
+  exsjp: [String]
+  pos: String
+  depth: Int
+  childSize: Int
+  sisonSize: Int
+  syndex: Int
+  princetonLink: String
+  gsrc: String
+  dsrc: String
+  depth_INCREMENT: Int
+  depth_DECREMENT: Int
+  childSize_INCREMENT: Int
+  childSize_DECREMENT: Int
+  sisonSize_INCREMENT: Int
+  sisonSize_DECREMENT: Int
+  syndex_INCREMENT: Int
+  syndex_DECREMENT: Int
+  seps_POP: Int
+  seps_PUSH: [String!]
+  lms_POP: Int
+  lms_PUSH: [String]
+  lmsjp_POP: Int
+  lmsjp_PUSH: [String]
+  exs_POP: Int
+  exs_PUSH: [String]
+  exsjp_POP: Int
+  exsjp_PUSH: [String]
+  lmspush: [wnLmspushUpdateFieldInput!]
+  lmsjppush: [wnLmsjppushUpdateFieldInput!]
+  jwlk: [wnJwlkUpdateFieldInput!]
+  jwlj: [wnJwljUpdateFieldInput!]
+}
+
+input wnWhere {
+  OR: [wnWhere!]
+  AND: [wnWhere!]
+  id: String
+  id_NOT: String
+  id_IN: [String]
+  id_NOT_IN: [String]
+  id_CONTAINS: String
+  id_NOT_CONTAINS: String
+  id_STARTS_WITH: String
+  id_NOT_STARTS_WITH: String
+  id_ENDS_WITH: String
+  id_NOT_ENDS_WITH: String
+  spell: String
+  spell_NOT: String
+  spell_IN: [String!]
+  spell_NOT_IN: [String!]
+  spell_CONTAINS: String
+  spell_NOT_CONTAINS: String
+  spell_STARTS_WITH: String
+  spell_NOT_STARTS_WITH: String
+  spell_ENDS_WITH: String
+  spell_NOT_ENDS_WITH: String
+  seps: [String!]
+  seps_NOT: [String!]
+  seps_INCLUDES: String
+  seps_NOT_INCLUDES: String
+  sep: String
+  sep_NOT: String
+  sep_IN: [String!]
+  sep_NOT_IN: [String!]
+  sep_CONTAINS: String
+  sep_NOT_CONTAINS: String
+  sep_STARTS_WITH: String
+  sep_NOT_STARTS_WITH: String
+  sep_ENDS_WITH: String
+  sep_NOT_ENDS_WITH: String
+  name: String
+  name_NOT: String
+  name_IN: [String!]
+  name_NOT_IN: [String!]
+  name_CONTAINS: String
+  name_NOT_CONTAINS: String
+  name_STARTS_WITH: String
+  name_NOT_STARTS_WITH: String
+  name_ENDS_WITH: String
+  name_NOT_ENDS_WITH: String
+  glo: String
+  glo_NOT: String
+  glo_IN: [String!]
+  glo_NOT_IN: [String!]
+  glo_CONTAINS: String
+  glo_NOT_CONTAINS: String
+  glo_STARTS_WITH: String
+  glo_NOT_STARTS_WITH: String
+  glo_ENDS_WITH: String
+  glo_NOT_ENDS_WITH: String
+  glojp: String
+  glojp_NOT: String
+  glojp_IN: [String!]
+  glojp_NOT_IN: [String!]
+  glojp_CONTAINS: String
+  glojp_NOT_CONTAINS: String
+  glojp_STARTS_WITH: String
+  glojp_NOT_STARTS_WITH: String
+  glojp_ENDS_WITH: String
+  glojp_NOT_ENDS_WITH: String
+  lm: String
+  lm_NOT: String
+  lm_IN: [String]
+  lm_NOT_IN: [String]
+  lm_CONTAINS: String
+  lm_NOT_CONTAINS: String
+  lm_STARTS_WITH: String
+  lm_NOT_STARTS_WITH: String
+  lm_ENDS_WITH: String
+  lm_NOT_ENDS_WITH: String
+  lmjp: String
+  lmjp_NOT: String
+  lmjp_IN: [String]
+  lmjp_NOT_IN: [String]
+  lmjp_CONTAINS: String
+  lmjp_NOT_CONTAINS: String
+  lmjp_STARTS_WITH: String
+  lmjp_NOT_STARTS_WITH: String
+  lmjp_ENDS_WITH: String
+  lmjp_NOT_ENDS_WITH: String
+  lms: [String]
+  lms_NOT: [String]
+  lms_INCLUDES: String
+  lms_NOT_INCLUDES: String
+  lmsjp: [String]
+  lmsjp_NOT: [String]
+  lmsjp_INCLUDES: String
+  lmsjp_NOT_INCLUDES: String
+  ex: String
+  ex_NOT: String
+  ex_IN: [String]
+  ex_NOT_IN: [String]
+  ex_CONTAINS: String
+  ex_NOT_CONTAINS: String
+  ex_STARTS_WITH: String
+  ex_NOT_STARTS_WITH: String
+  ex_ENDS_WITH: String
+  ex_NOT_ENDS_WITH: String
+  exjp: String
+  exjp_NOT: String
+  exjp_IN: [String]
+  exjp_NOT_IN: [String]
+  exjp_CONTAINS: String
+  exjp_NOT_CONTAINS: String
+  exjp_STARTS_WITH: String
+  exjp_NOT_STARTS_WITH: String
+  exjp_ENDS_WITH: String
+  exjp_NOT_ENDS_WITH: String
+  exs: [String]
+  exs_NOT: [String]
+  exs_INCLUDES: String
+  exs_NOT_INCLUDES: String
+  exsjp: [String]
+  exsjp_NOT: [String]
+  exsjp_INCLUDES: String
+  exsjp_NOT_INCLUDES: String
+  pos: String
+  pos_NOT: String
+  pos_IN: [String]
+  pos_NOT_IN: [String]
+  pos_CONTAINS: String
+  pos_NOT_CONTAINS: String
+  pos_STARTS_WITH: String
+  pos_NOT_STARTS_WITH: String
+  pos_ENDS_WITH: String
+  pos_NOT_ENDS_WITH: String
+  depth: Int
+  depth_NOT: Int
+  depth_IN: [Int!]
+  depth_NOT_IN: [Int!]
+  depth_LT: Int
+  depth_LTE: Int
+  depth_GT: Int
+  depth_GTE: Int
+  childSize: Int
+  childSize_NOT: Int
+  childSize_IN: [Int!]
+  childSize_NOT_IN: [Int!]
+  childSize_LT: Int
+  childSize_LTE: Int
+  childSize_GT: Int
+  childSize_GTE: Int
+  sisonSize: Int
+  sisonSize_NOT: Int
+  sisonSize_IN: [Int!]
+  sisonSize_NOT_IN: [Int!]
+  sisonSize_LT: Int
+  sisonSize_LTE: Int
+  sisonSize_GT: Int
+  sisonSize_GTE: Int
+  syndex: Int
+  syndex_NOT: Int
+  syndex_IN: [Int]
+  syndex_NOT_IN: [Int]
+  syndex_LT: Int
+  syndex_LTE: Int
+  syndex_GT: Int
+  syndex_GTE: Int
+  princetonLink: String
+  princetonLink_NOT: String
+  princetonLink_IN: [String]
+  princetonLink_NOT_IN: [String]
+  princetonLink_CONTAINS: String
+  princetonLink_NOT_CONTAINS: String
+  princetonLink_STARTS_WITH: String
+  princetonLink_NOT_STARTS_WITH: String
+  princetonLink_ENDS_WITH: String
+  princetonLink_NOT_ENDS_WITH: String
+  gsrc: String
+  gsrc_NOT: String
+  gsrc_IN: [String]
+  gsrc_NOT_IN: [String]
+  gsrc_CONTAINS: String
+  gsrc_NOT_CONTAINS: String
+  gsrc_STARTS_WITH: String
+  gsrc_NOT_STARTS_WITH: String
+  gsrc_ENDS_WITH: String
+  gsrc_NOT_ENDS_WITH: String
+  dsrc: String
+  dsrc_NOT: String
+  dsrc_IN: [String]
+  dsrc_NOT_IN: [String]
+  dsrc_CONTAINS: String
+  dsrc_NOT_CONTAINS: String
+  dsrc_STARTS_WITH: String
+  dsrc_NOT_STARTS_WITH: String
+  dsrc_ENDS_WITH: String
+  dsrc_NOT_ENDS_WITH: String
+  updateCount: Int
+  updateCount_NOT: Int
+  updateCount_IN: [Int]
+  updateCount_NOT_IN: [Int]
+  updateCount_LT: Int
+  updateCount_LTE: Int
+  updateCount_GT: Int
+  updateCount_GTE: Int
+  createdAt: AWSDateTime
+  createdAt_NOT: AWSDateTime
+  createdAt_IN: [AWSDateTime]
+  createdAt_NOT_IN: [AWSDateTime]
+  createdAt_LT: AWSDateTime
+  createdAt_LTE: AWSDateTime
+  createdAt_GT: AWSDateTime
+  createdAt_GTE: AWSDateTime
+  lastModified: AWSDateTime
+  lastModified_NOT: AWSDateTime
+  lastModified_IN: [AWSDateTime]
+  lastModified_NOT_IN: [AWSDateTime]
+  lastModified_LT: AWSDateTime
+  lastModified_LTE: AWSDateTime
+  lastModified_GT: AWSDateTime
+  lastModified_GTE: AWSDateTime
+  lmspush: PushWhere @deprecated(reason: "Use `lmspush_SOME` instead.")
+  lmspush_NOT: PushWhere @deprecated(reason: "Use `lmspush_NONE` instead.")
+  lmspushAggregate: wnLmspushAggregateInput
+
+# """Return wns where all of the related Pushes match this filter"""
+  lmspush_ALL: PushWhere
+
+# """Return wns where none of the related Pushes match this filter"""
+  lmspush_NONE: PushWhere
+
+# """Return wns where one of the related Pushes match this filter"""
+  lmspush_SINGLE: PushWhere
+
+# """Return wns where some of the related Pushes match this filter"""
+  lmspush_SOME: PushWhere
+  lmsjppush: PushWhere @deprecated(reason: "Use `lmsjppush_SOME` instead.")
+  lmsjppush_NOT: PushWhere @deprecated(reason: "Use `lmsjppush_NONE` instead.")
+  lmsjppushAggregate: wnLmsjppushAggregateInput
+
+# """Return wns where all of the related Pushes match this filter"""
+  lmsjppush_ALL: PushWhere
+
+# """Return wns where none of the related Pushes match this filter"""
+  lmsjppush_NONE: PushWhere
+
+# """Return wns where one of the related Pushes match this filter"""
+  lmsjppush_SINGLE: PushWhere
+
+# """Return wns where some of the related Pushes match this filter"""
+  lmsjppush_SOME: PushWhere
+  jwlk: wnWhere @deprecated(reason: "Use `jwlk_SOME` instead.")
+  jwlk_NOT: wnWhere @deprecated(reason: "Use `jwlk_NONE` instead.")
+  jwlkAggregate: wnJwlkAggregateInput
+
+# """Return wns where all of the related wns match this filter"""
+  jwlk_ALL: wnWhere
+
+# """Return wns where none of the related wns match this filter"""
+  jwlk_NONE: wnWhere
+
+# """Return wns where one of the related wns match this filter"""
+  jwlk_SINGLE: wnWhere
+
+# """Return wns where some of the related wns match this filter"""
+  jwlk_SOME: wnWhere
+  jwlj: wnWhere @deprecated(reason: "Use `jwlj_SOME` instead.")
+  jwlj_NOT: wnWhere @deprecated(reason: "Use `jwlj_NONE` instead.")
+  jwljAggregate: wnJwljAggregateInput
+
+# """Return wns where all of the related wns match this filter"""
+  jwlj_ALL: wnWhere
+
+# """Return wns where none of the related wns match this filter"""
+  jwlj_NONE: wnWhere
+
+# """Return wns where one of the related wns match this filter"""
+  jwlj_SINGLE: wnWhere
+
+# """Return wns where some of the related wns match this filter"""
+  jwlj_SOME: wnWhere
+  lmspushConnection: wnLmspushConnectionWhere @deprecated(reason: "Use `lmspushConnection_SOME` instead.")
+  lmspushConnection_NOT: wnLmspushConnectionWhere @deprecated(reason: "Use `lmspushConnection_NONE` instead.")
+  lmspushConnection_ALL: wnLmspushConnectionWhere
+  lmspushConnection_NONE: wnLmspushConnectionWhere
+  lmspushConnection_SINGLE: wnLmspushConnectionWhere
+  lmspushConnection_SOME: wnLmspushConnectionWhere
+  lmsjppushConnection: wnLmsjppushConnectionWhere @deprecated(reason: "Use `lmsjppushConnection_SOME` instead.")
+  lmsjppushConnection_NOT: wnLmsjppushConnectionWhere @deprecated(reason: "Use `lmsjppushConnection_NONE` instead.")
+  lmsjppushConnection_ALL: wnLmsjppushConnectionWhere
+  lmsjppushConnection_NONE: wnLmsjppushConnectionWhere
+  lmsjppushConnection_SINGLE: wnLmsjppushConnectionWhere
+  lmsjppushConnection_SOME: wnLmsjppushConnectionWhere
+  jwlkConnection: wnJwlkConnectionWhere @deprecated(reason: "Use `jwlkConnection_SOME` instead.")
+  jwlkConnection_NOT: wnJwlkConnectionWhere @deprecated(reason: "Use `jwlkConnection_NONE` instead.")
+  jwlkConnection_ALL: wnJwlkConnectionWhere
+  jwlkConnection_NONE: wnJwlkConnectionWhere
+  jwlkConnection_SINGLE: wnJwlkConnectionWhere
+  jwlkConnection_SOME: wnJwlkConnectionWhere
+  jwljConnection: wnJwljConnectionWhere @deprecated(reason: "Use `jwljConnection_SOME` instead.")
+  jwljConnection_NOT: wnJwljConnectionWhere @deprecated(reason: "Use `jwljConnection_NONE` instead.")
+  jwljConnection_ALL: wnJwljConnectionWhere
+  jwljConnection_NONE: wnJwljConnectionWhere
+  jwljConnection_SINGLE: wnJwljConnectionWhere
+  jwljConnection_SOME: wnJwljConnectionWhere
+}

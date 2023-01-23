@@ -10,15 +10,16 @@
 //     cookies: request.cookies,
 //   });
 // }
-import {ApolloServer} from "apollo-server-lambda"
+import {ApolloServer} from "@apollo/server"
 import neo4j from "neo4j-driver";
 import { Neo4jGraphQL } from "@neo4j/graphql";
+import { startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 
 require("dotenv").config()
 // (You may need to replace your connection details, username and password)
-const AURA_ENDPOINT = process.env.AURA_ENDPOINT
-const USERNAME = process.env.USERNAME
-const PASSWORD = process.env.PASSWORD
+const AURA_ENDPOINT = process.env.AURA_ENDPOINT || ""
+const USERNAME = process.env.USERNAME || ""
+const PASSWORD = process.env.PASSWORD || ""
 
 // Create Neo4j driver instance
 const driver = neo4j.driver(AURA_ENDPOINT, neo4j.auth.basic(USERNAME, PASSWORD));
@@ -64,7 +65,7 @@ interface Rel @relationshipProperties {
     k: [String!]
 }
 `
-const updCallback = async (root) => {
+const updCallback = async (root: any) => {
     return root.updateCount + 1
 }
 
@@ -80,12 +81,16 @@ const neoSchema = new Neo4jGraphQL({
 });
 
 
-const server = neoSchema.getSchema().then((schema) => {
+const server = await neoSchema.getSchema().then((schema) => {
     // Create ApolloServer instance to serve GraphQL schema
-    return new ApolloServer({
+    const server = new ApolloServer({
         schema,
-        context: { driverConfig: { database: 'neo4j' } }
+        // context: { driverConfig: { database: 'neo4j' } }
     });
+    return server
 });
+export const graphqlHandler = startServerAndCreateLambdaHandler(server);
+const port = 4000
+// const {url} = await startStandaloneServer(server, {listen: {port}})
 
-exports.handler = server.createHandler()
+// const handler = server.then(e => e.createHandler())
