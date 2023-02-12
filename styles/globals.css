@@ -1,9 +1,19 @@
+:root {
+    --background-color: rgb(33, 33, 33);
+    --color-main: rgba(255, 255, 255, 0.874);
+}
 html {
     font-family: "segoe ui", "UD digi kyokasho nk-r";
 }
 body {
     margin: 0;
     margin-left: 5px;
+    background-color: var(--background-color);
+    color: var(--color-main);
+}
+input, div, button {
+    background-color: var(--background-color);
+    color: var(--color-main);
 }
 a {
   color: inherit;
@@ -93,11 +103,13 @@ a {
     margin-top: 1em;
 }
 button {
+    background-color: var(--background-color);
+    /* opacity: 0.8; */
     border: none;
     margin-right: 5px
 }
 button.open {
-    background-color: rgb(255, 201, 216);
+    background-color: rgb(65, 67, 68);
     border: none;
 }
 

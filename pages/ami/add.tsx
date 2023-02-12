@@ -5,7 +5,7 @@ type AmiAddProps = {
 }
 const AmiAdd: FC<AmiAddProps> = ({spell}: AmiAddProps) => {
   return(<>
-    amiadd 
+    
   </>)
 }
 
